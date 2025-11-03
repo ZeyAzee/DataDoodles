@@ -92,9 +92,11 @@ body::before {
   font-size: 44px;
   line-height: 1.1;
   margin: 0 0 24px;
+  max-width: 900px;
 }
 .meta .muted {
-  color: var(--muted);
+  color: #2d0c4c;
+  font-weight: 700;
 }
 .meta p {
   margin: 0.25rem 0;
@@ -108,7 +110,7 @@ body::before {
   margin: 0 0 12px;
 }
 .lead {
-  max-width: 920px;
+  max-width: 980px;
   line-height: 1.55;
   color: #3a3a3a;
 }
@@ -140,8 +142,17 @@ body::before {
 }
 .card.big h3 {
   margin: 0;
+  color: #2d0c4c;
+  font-weight: 600;
+}
+.card.list h4 {
   color: #3c3350;
   font-weight: 600;
+}
+
+/* Filters */
+.filters{
+  margin-top: 18px;
 }
 
 /* Analysis tiles */
