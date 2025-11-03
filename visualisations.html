@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DataDoodles — Data Visualisation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/visualisations.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="DataDoodles Home">
+          <span class="logo" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="2"
+                y="2"
+                width="20"
+                height="20"
+                rx="4"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <rect
+                x="7"
+                y="7"
+                width="10"
+                height="10"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+          </span>
+          <span class="brand-name">DataDoodles</span>
+        </a>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="visualisations.html" class="active">Vizualizations</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="title-block">
+        <div class="container">
+          <h1>Data Visualisation</h1>
+          <p class="sub">
+            Interactive charts and graphs exploring global conflict patterns,
+            trends, and regional dynamics from 1989 to 2024
+          </p>
+        </div>
+      </section>
+
+      <div class="notice-banner">
+        <div class="container">
+          <p>
+            The following visualizations provide comprehensive insights into
+            global conflict data. Each chart represents different analytical
+            perspectives, from temporal trends to regional comparisons and
+            proportional distributions. The data has been carefully processed
+            and normalized to ensure accuracy and comparability across different
+            metrics and time periods.
+          </p>
+        </div>
+      </div>
+
+      <section class="gallery">
+        <div class="container">
+          <h2>All Visualisations</h2>
+          <div class="cards">
+            <!-- Card 1 -->
+            <a href="#" class="viz-card">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">Barchart</div>
+            </a>
+            <!-- Card 2 -->
+            <a href="#" class="viz-card">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">Grouped Barchart</div>
+            </a>
+            <!-- Card 3 -->
+            <a href="#" class="viz-card">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">Heatmap</div>
+            </a>
+            <!-- Card 4 -->
+            <a href="#" class="viz-card">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">100% Stacked Barchart</div>
+            </a>
+            <!-- Card 5 -->
+            <a href="#" class="viz-card">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">Waffle Chart</div>
+            </a>
+            <!-- Card 6 -->
+            <a href="#" class="viz-card placeholder">
+              <div class="viz-canvas">Coming Soon...</div>
+              <div class="viz-footer">&nbsp;</div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="container">
+          <div class="footer-grid">
+            <div>
+              <h4>About This Project</h4>
+              <p>
+                A comprehensive data visualization platform for analyzing global
+                conflict patterns and trends using modern data journalism
+                techniques.
+              </p>
+            </div>
+            <div>
+              <h4>Resources</h4>
+              <ul class="plain">
+                <li><a href="#">Data Sources</a></li>
+                <li><a href="#">Documentation</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Contact</h4>
+              <div class="contact-icons" aria-hidden="true">
+                <span class="icon">✉</span>
+                <span class="icon">💬</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          © 2025 Data Doodles Project. All rights reserved.
+        </div>
+      </footer>
+    </main>
+
+    <script src="js/visualisations.js"></script>
+  </body>
+</html>
