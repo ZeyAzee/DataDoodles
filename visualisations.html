@@ -4,9 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DataDoodles — Data Visualisation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles/visualisations.css" />
   </head>
   <body>
@@ -55,8 +58,9 @@
         <div class="container">
           <h1>Data Visualisation</h1>
           <p class="sub">
-            Interactive charts and visual stories revealing gender 
-            inequality trends and women’s economic participation across the world from 2010 to 2024.
+            Interactive charts and visual stories revealing gender inequality
+            trends and women’s economic participation across the world from 2010
+            to 2024.
           </p>
         </div>
       </section>
@@ -64,12 +68,13 @@
       <div class="notice-banner">
         <div class="container">
           <p>
-            The following visualizations highlight key dimensions of gender 
-            inequality across countries and over time. Each chart focuses on 
-            a different aspect of women’s economic status — from employment 
-            and labor force participation to political representation.
-            The data comes from the World Bank’s Gender Statistics and has 
-            been carefully cleaned and processed to ensure accuracy and comparability across nations.
+            The following visualizations highlight key dimensions of gender
+            inequality across countries and over time. Each chart focuses on a
+            different aspect of women’s economic status — from employment and
+            labor force participation to political representation. The data
+            comes from the World Bank’s Gender Statistics and has been carefully
+            cleaned and processed to ensure accuracy and comparability across
+            nations.
           </p>
         </div>
       </div>
@@ -78,32 +83,56 @@
         <div class="container">
           <h2>All Visualisations</h2>
           <div class="cards">
-            <!-- Card 1 -->
-            <a href="#" class="viz-card">
+            <a href="#" class="viz-card" data-chart="Barchart">
               <div class="viz-canvas">chart</div>
-              <div class="viz-footer">Barchart</div>
+              <div class="viz-footer">
+                <h4>Female Employment Rate (2010)</h4>
+                <p>
+                  Comparison of female employment rates (as a percentage of the female population) 
+                  in different countries based on 2010 data.
+                </p>
+              </div>
             </a>
-            <!-- Card 2 -->
-            <a href="#" class="viz-card">
+            <a href="#" class="viz-card" data-chart="Grouped Barchart">
               <div class="viz-canvas">chart</div>
-              <div class="viz-footer">Grouped Barchart</div>
+              <div class="viz-footer">
+                <h4>Employment Rate by Sex (2010)</h4>
+                <p>
+                  A direct comparison of employment rates among women and men, 
+                  highlighting the gender gap in labor force participation.
+                </p>
+              </div>
             </a>
-            <!-- Card 3 -->
-            <a href="#" class="viz-card">
+            <a href="#" class="viz-card" data-chart="Heatmap">
               <div class="viz-canvas">chart</div>
-              <div class="viz-footer">Heatmap</div>
+              <div class="viz-footer">
+                <h4>Gender Employment Gap (2010-2024)</h4>
+                <p>
+                  Heat map showing how the percentage gap in employment changed from 2010 to 2024. 
+                  Darker shades indicate a larger gap.
+                </p>
+              </div>
             </a>
-            <!-- Card 4 -->
-            <a href="#" class="viz-card">
+            <a href="#" class="viz-card" data-chart="100% Stacked Barchart">
               <div class="viz-canvas">chart</div>
-              <div class="viz-footer">100% Stacked Barchart</div>
+              <div class="viz-footer">
+                <h4>Labor Force Composition (2024)</h4>
+                <p>
+                  A diagram showing the proportion (composition) of the workforce by gender. 
+                  It illustrates what percentage of the total number of workers are women and men.
+                </p>
+              </div>
             </a>
-            <!-- Card 5 -->
-            <a href="#" class="viz-card">
+            <a href="#" class="viz-card" data-chart="Waffle Chart">
               <div class="viz-canvas">chart</div>
-              <div class="viz-footer">Waffle Chart</div>
+              <div class="viz-footer">
+                <h4>Women in Parliament (2024)</h4>
+                <p>
+                  A “waffle” chart showing the proportion of seats held by women in the parliaments 
+                  of individual countries in 2024. Each square represents 1%.
+                </p>
+              </div>
             </a>
-            <!-- Card 6 -->
             <a href="#" class="viz-card placeholder">
               <div class="viz-canvas">Coming Soon...</div>
               <div class="viz-footer">&nbsp;</div>
@@ -118,14 +147,20 @@
             <div>
               <h4>About This Project</h4>
               <p>
-                This project visualizes global gender inequality using World Bank data (2010–2024), 
-                comparing men and women in work and leadership.
+                This project visualizes global gender inequality using World
+                Bank data (2010–2024), comparing men and women in work and
+                leadership.
               </p>
             </div>
             <div>
               <h4>Resources</h4>
               <ul class="plain">
-                <li><a href="https://databank.worldbank.org/source/gender-statistics">Data Sources</a></li>
+                <li>
+                  <a
+                    href="https://databank.worldbank.org/source/gender-statistics"
+                    >Data Sources</a
+                  >
+                </li>
                 <li><a href="#">Documentation</a></li>
               </ul>
             </div>
@@ -144,6 +179,7 @@
       </footer>
     </main>
 
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="js/visualisations.js"></script>
   </body>
 </html>

@@ -153,13 +153,38 @@ body::before {
   justify-content: center;
   color: #222;
 }
+
 .viz-footer {
-  padding: 16px 18px;
-  border-top: 1px solid var(--line);
-  font-weight: 500;
+  font-weight: 400; 
+  padding: 16px 20px;
 }
+
+.viz-footer h4 {
+  margin: 0 0 6px 0;
+  font-size: 17px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.viz-footer p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .placeholder .viz-canvas {
   color: #5b4a73;
+}
+
+.viz-card.placeholder .viz-canvas {
+  flex-grow: 1; 
+  border-top: none; 
+  min-height: 270px; 
+}
+
+.viz-card.placeholder .viz-footer {
+  display: none; 
 }
 
 
