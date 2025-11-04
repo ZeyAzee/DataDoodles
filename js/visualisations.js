@@ -36,35 +36,35 @@ document.addEventListener("DOMContentLoaded", () => {
         case "Barchart":
           drawBarchart(
             canvas,
-            "../Data/Data_Clean/bar_female_employment.csv",
+            "Data/Data_Clean/bar_female_employment.csv",
             COLORS
           );
           break;
         case "Grouped Barchart":
           drawGroupedBarchart(
             canvas,
-            "../Data/Data_Clean/grouped_emp_by_sex.csv",
+            "Data/Data_Clean/grouped_emp_by_sex.csv",
             COLORS
           );
           break;
         case "Heatmap":
           drawHeatmap(
             canvas,
-            "../Data/Data_Clean/heatmap_employment_gap.csv",
+            "Data/Data_Clean/heatmap_employment_gap.csv",
             COLORS
           );
           break;
         case "100% Stacked Barchart":
           drawStackedBarchart(
             canvas,
-            "../Data/Data_Clean/stacked100_labor_force_share.csv",
+            "Data/Data_Clean/stacked100_labor_force_share.csv",
             COLORS
           );
           break;
         case "Waffle Chart":
           drawWaffleChart(
             canvas,
-            "../Data/Data_Clean/waffle_women_parliament.csv",
+            "Data/Data_Clean/waffle_women_parliament.csv",
             COLORS
           );
           break;
