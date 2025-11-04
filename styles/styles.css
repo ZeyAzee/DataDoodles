@@ -162,17 +162,17 @@ body::before {
 .analysis h2 {
   margin-bottom: 16px;
 }
-.grid.two.four-at-xl {
+.grid.two.five-at-xl {
   grid-template-columns: 1fr;
 }
 @media (min-width: 700px) {
-  .grid.two.four-at-xl {
+  .grid.two.five-at-xl {
     grid-template-columns: 1fr 1fr;
   }
 }
 @media (min-width: 1100px) {
-  .grid.two.four-at-xl {
-    grid-template-columns: repeat(4, 1fr);
+  .grid.two.five-at-xl {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 .tile {
@@ -253,7 +253,6 @@ ul.plain a:hover {
 .contact-icons {
   display: flex;
   gap: 16px;
-  font-size: 22px;
 }
 .copyright {
   font-size: 12px;
