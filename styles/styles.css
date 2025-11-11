@@ -176,6 +176,10 @@ body::before {
   margin-top: 30px;
   margin-bottom: 5px;
 }
+.an_t_2{
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
 .grid.two.five-at-xl {
   grid-template-columns: 1fr;
 }
