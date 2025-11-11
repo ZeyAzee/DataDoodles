@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DataDoodles — Conflict and Human Suffering</title>
+    <title>DataDoodles — Impact of War on Child Education</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -56,7 +56,7 @@
     <main>
       <section class="hero">
         <div class="container">
-          <h1>Economic Inequality for Women Across the World</h1>
+          <h1>Impact of War on Child Education</h1>
           <div class="meta">
             <div class="meta-group">
               <p><span class="muted">Group name:</span></p>
@@ -73,12 +73,12 @@
         <div class="container">
           <h2>Project Overview</h2>
           <p class="lead">
-            This project explores how gender inequality still shapes women’s
-            economic opportunities around the world. Using World Bank Gender
-            Statistics from 2010 to 2024, we compare men and women in
-            employment, labor participation, and political representation.
-            Through data and visual storytelling, we highlight both the progress
-            made and the gaps that remain in achieving true equality.
+            This project explores how armed conflicts affect children’s 
+            right to education. Using global time-series data (2010–2024),
+             we compare conflict-affected contexts with stable ones and track
+              how out-of-school rates evolve over time. The goal is to turn complex
+               evidence into clear visuals that highlight an often-invisible form of
+                human suffering: lost learning and lost futures.
           </p>
         </div>
       </section>
@@ -90,16 +90,10 @@
             <div class="card big">
               <h3>Primary Sources</h3>
               <ul class="card list">
-                <li><h4>World Bank – Gender Statistics</h4></li>
+                <li><h4>Share-primary-school-age-out-of-school (source: UNESCO UIS) — percentage of children out of school</h4></li>
                 <li>
                   <h4>
-                    International Labour Organization (ILO) – Employment & Labor
-                    data
-                  </h4>
-                </li>
-                <li>
-                  <h4>
-                    World Development Indicators (WDI) – Women in Parliament
+                    Number of ongoing conflicts by type (based on UCDP/PRIO & OWID processing) — summed into a total conflicts measure
                   </h4>
                 </li>
               </ul>
@@ -109,16 +103,17 @@
               <ul class="card list">
                 <li><h4>Time Period: 2010–2024</h4></li>
                 <li>
-                  <h4>Geographic Coverage: 16 Countries across 6 regions</h4>
+                  <h4>Geographic Coverage: 6 conflict-affected and 6 stable comparison countries</h4>
                 </li>
                 <li>
                   <h4>
-                    Indicators: Employment, Labor Force Participation, Women in
-                    Parliament
+                    Indicators: <br><b>out_of_school_pct</b> — share of primary-school-age children out of school (UNESCO UIS via OWID)
+                    <br><b>num_conflicts</b> — total number of active conflicts per country-year (UCDP/PRIO via OWID)
+
                   </h4>
                 </li>
                 <li>
-                  <h4>Data Points: ~1,200 after filtering and cleaning</h4>
+                  <h4>Data Points: ~2,120 after filtering and cleaning</h4>
                 </li>
               </ul>
             </div>
@@ -130,24 +125,46 @@
         <div class="container">
           <h2>Data Filters</h2>
           <p class="lead">
-            The dataset spans 2010–2024 and includes 16 countries selected to
-            represent diverse regions and economic conditions worldwide:
+            Data from 2010–2024 was selected for the analysis. All available years were 
+            used for time-series and distribution analysis, while averages from 2018–2023 
+            were used for the bar ranking to reflect the recent period.
           </p>
-          <ul class="card list">
+          <p class="lead">
+            Countries were selected for a balanced regional representation and divided into two groups
+          </p>
+          <ul class="filters list">
             <li>
-              <h4>Europe (Germany, Italy, Spain, Sweden, Norway, Belarus)</h4>
+              <h4><b>Conflict-affected countries</b>: Afghanistan (Asia), Syria (MENA), 
+                Yemen (MENA), Sudan (Africa), Ukraine (Europe), Palestine (MENA).</h4>
             </li>
-            <li><h4>Asia (China, India, Iran, Japan)</h4></li>
-            <li><h4>Africa (Kenya, South Africa)</h4></li>
-            <li><h4>North America (Canada)</h4></li>
-            <li><h4>South America (Argentina, Brazil)</h4></li>
-            <li><h4>Oceania (Australia)</h4></li>
+            <li>
+              <h4><b>Stable countries</b> (for comparison): Germany (Europe), Canada 
+              (North America), Japan (Asia), Brazil (South America), Kenya (Africa).</h4>
+            </li>
           </ul>
           <p class="lead">
-            Five indicators from the World Bank Gender Statistics — employment
-            rates, labor force participation, and women’s representation in
-            parliament — were chosen to offer a balanced, global perspective on
-            gender inequality.
+            Filtering criteria:
+          </p>
+          <ul class="filters list">
+            <li>
+              <h4>Years limited to 2010–2024 (to ensure overlap across both datasets)</h4>
+            </li>
+            <li>
+              <h4>Only records with valid education data retained</h4>
+            </li>
+            <li>
+              <h4><b>Conflict status assigned as:</b> <br>Conflict if total number of conflicts > 0, otherwise Stable</h4>
+            </li>
+          </ul>
+          <p class="lead">
+            The merged dataset provides a comprehensive, longitudinal view of how 
+            armed conflicts affect access to primary education.By combining UNESCO’s 
+            out-of-school statistics with UCDP/PRIO conflict records from 2010 to 2024, 
+            it captures both the scale and persistence of educational disruption across 
+            time and regions.The balanced sample of conflict-affected and stable countries 
+            allows for meaningful comparison — showing how war consistently raises the percentage 
+            of children excluded from school.Through this lens, education becomes a measurable 
+            indicator of human suffering, linking data to the lived consequences of instability.
           </p>
         </div>
       </section>
@@ -155,54 +172,55 @@
       <section class="analysis" id="viz">
         <div class="container">
           <h2>Explore Our Analysis</h2>
+          <h4 class="an_t">Comparing Countries and Contexts</h4>
           <div class="grid two five-at-xl">
             <a class="tile" href="visualisations.html#viz-barchart" aria-label="Female Employment Rate (2010)">
               <div class="tile-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
-                  <path d="M293.27-533.33q-55.27 0-94.27-39.07-39-39.07-39-94.33Q160-722 199.07-761q39.06-39 94.33-39 55.27 0 94.27 39.07 39 39.06 39 94.33 0 55.27-39.07 94.27-39.07 39-94.33 39Zm-.02-66.67q27.75 0 47.25-19.42t19.5-47.17q0-27.74-19.42-47.24-19.42-19.5-47.17-19.5-27.74 0-47.24 19.42-19.5 19.42-19.5 47.16 0 27.75 19.42 47.25t47.16 19.5ZM666.6-160q-55.27 0-94.27-39.07-39-39.06-39-94.33 0-55.27 39.07-94.27 39.07-39 94.33-39 55.27 0 94.27 39.07 39 39.07 39 94.33Q800-238 760.93-199q-39.06 39-94.33 39Zm-.01-66.67q27.74 0 47.24-19.42 19.5-19.42 19.5-47.16 0-27.75-19.42-47.25T666.75-360q-27.75 0-47.25 19.42T600-293.41q0 27.74 19.42 47.24 19.42 19.5 47.17 19.5ZM206.67-160 160-206.67 753.33-800 800-753.33 206.67-160Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#d7d7d7">
+                  <path d="M146.67-186.67h178v-346.66h-178v346.66Zm244.66 0h177.34v-586.66H391.33v586.66Zm244 0h178v-266.66h-178v266.66ZM80-120v-480h244.67v-240h310.66v320H880v400H80Z"/>
                 </svg>
               </div>
-              <div class="tile-title">Female Employment Rate</div>
+              <div class="tile-title">Average Out-of-School Rate</div>
               <div class="tile-arrow" aria-hidden="true">➜</div>
             </a>
 
             <a class="tile" href="visualisations.html#viz-grouped-barchart" aria-label="Employment Rate by Sex (2010)">
               <div class="tile-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
-                  <path d="M414.67-40v-80h-228q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840h228v-80h66.66v880h-66.66Zm-228-188h228v-264.67L186.67-228ZM548-120v-370l225.33 262v-545.33H548V-840h225.33q27 0 46.84 19.83Q840-800.33 840-773.33v586.66q0 27-19.83 46.84Q800.33-120 773.33-120H548Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#d7d7d7">
+                  <path d="M160-160v-480h146.67v480H160Zm206.67 0v-280h146.66v280H366.67Zm286.66 0v-640H800v640H653.33Z"/>
                 </svg>
               </div>
-              <div class="tile-title">Employment Rate by Sex</div>
+              <div class="tile-title">Out-of-School Rate by Year</div>
               <div class="tile-arrow" aria-hidden="true">➜</div>
             </a>
 
             <a class="tile" href="visualisations.html#viz-heatmap" aria-label="Gender Employment Gap (2010-2024)">
               <div class="tile-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
-                  <path d="M240-120 84.67-275.33 240-430.67l51.33 51.34L224-312h512l-67.33-67.33L720-430.67l155.33 155.34L720-120l-51.33-51.33L736-238.67H224l67.33 67.34L240-120ZM92.67-530v-16.33q0-22.06 11.94-40.44 11.93-18.37 33.06-27.56 25.38-10.68 52.23-16.51 26.85-5.83 56.14-5.83t56.11 5.83q26.83 5.83 52.18 16.51 21.13 9.19 33.06 27.56 11.94 18.38 11.94 40.44V-530H92.67Zm468 0v-16.33q0-22.06 11.94-40.44 11.93-18.37 33.06-27.56 25.38-10.68 52.23-16.51 26.85-5.83 56.14-5.83t56.11 5.83q26.83 5.83 52.18 16.51 21.13 9.19 33.06 27.56 11.94 18.38 11.94 40.44V-530H560.67Zm-314.7-156.67q-31.64 0-54.14-22.53t-22.5-54.16q0-31.64 22.53-54.14t54.17-22.5q31.64 0 54.14 22.53t22.5 54.17q0 31.63-22.53 54.13-22.53 22.5-54.17 22.5Zm468 0q-31.64 0-54.14-22.53t-22.5-54.16q0-31.64 22.53-54.14t54.17-22.5q31.64 0 54.14 22.53t22.5 54.17q0 31.63-22.53 54.13-22.53 22.5-54.17 22.5Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#d7d7d7">
+                  <path d="M120-120v-66.67h120V-120H120Zm0-163.33V-350h321.33v66.67H120Zm0-163.34v-66.66h720v66.66H120ZM120-610v-66.67h321.33V-610H120Zm0-163.33V-840h120v66.67H120ZM321.33-120v-66.67h120V-120h-120ZM320-773.33V-840h120v66.67H320ZM522-120v-66.67h116.67V-120H522Zm-2-163.33V-350h320v66.67H520ZM520-610v-66.67h320V-610H520Zm0-163.33V-840h120v66.67H520ZM720-120v-66.67h120V-120H720Zm0-653.33V-840h120v66.67H720Z"/>
                 </svg>
               </div>
-              <div class="tile-title">Gender Employment Gap</div>
+              <div class="tile-title">Education Disruption Heatmap</div>
               <div class="tile-arrow" aria-hidden="true">➜</div>
             </a>
 
             <a class="tile" href="visualisations.html#viz-stacked-barchart" aria-label="Labor Force Composition (2024)">
               <div class="tile-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
-                  <path d="M80-120v-66.67h366.67v-471.66q-26-9-46-29t-29-46H223.33l123.34 294.66Q346-392 307.33-359.33q-38.66 32.66-94 32.66-55.33 0-94-32.66Q80.67-392 80-438.67l123.33-294.66H120V-800h251.67q12-35 41.66-57.5Q443-880 480-880t66.67 22.5q29.66 22.5 41.66 57.5H840v66.67h-83.33L880-438.67q-.67 46.67-39.33 79.34-38.67 32.66-94 32.66-55.34 0-94-32.66Q614-392 613.33-438.67l123.34-294.66H588.33q-9 26-29 46t-46 29v471.66H880V-120H80Zm591.67-320h150l-75-180.67-75 180.67Zm-533.34 0h150l-75-180.67-75 180.67ZM480-720q19.67 0 33.17-13.83 13.5-13.84 13.5-32.84 0-19.66-13.5-33.16-13.5-13.5-33.17-13.5-19 0-32.83 13.5-13.84 13.5-13.84 33.16 0 19 13.84 32.84Q461-720 480-720Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#d7d7d7">
+                  <path d="M160-160v-460h146.67v460H160Zm0-493.33V-800h146.67v146.67H160ZM406.67-160v-340h146.66v340H406.67Zm0-373.33V-680h146.66v146.67H406.67ZM653.33-160v-220H800v220H653.33Zm0-253.33V-560H800v146.67H653.33Z"/>
                 </svg>
               </div>
-              <div class="tile-title">Labor Force Composition</div>
+              <div class="tile-title">Share of Contexts by Year</div>
               <div class="tile-arrow" aria-hidden="true">➜</div>
             </a>
 
             <a class="tile" href="visualisations.html#viz-waffle-chart" aria-label="Women in Parliament (2024)">
               <div class="tile-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
-                  <path d="M208-254v-319.33h66.67V-254H208Zm241.33 0v-319.33H516V-254h-66.67ZM80-640v-62l400-218.67L880-702v62H80Zm149-66.67h502l-251-138-251 138Zm-149 586v-66.66h494q2 16.33 4 32.5 2 16.16 8 34.16H80ZM685.33-418v-155.33H752v122L685.33-418ZM800 0q-69-17-114.5-79.5T640-218v-102l160-80 160 80v102q0 76-45.5 138.5T800 0Zm-23.67-120 141-140.67-32.66-32.66-108.34 107.66L724-238l-32.67 33 85 85ZM229-706.67h502-502Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#d7d7d7">
+                  <path d="M120-513.33V-840h326.67v326.67H120ZM120-120v-326.67h326.67V-120H120Zm393.33-393.33V-840H840v326.67H513.33Zm0 393.33v-326.67H840V-120H513.33ZM186.67-580H380v-193.33H186.67V-580ZM580-580h193.33v-193.33H580V-580Zm0 393.33h193.33V-380H580v193.33Zm-393.33 0H380V-380H186.67v193.33ZM580-580Zm0 200Zm-200 0Zm0-200Z"/>
                 </svg>
               </div>
-              <div class="tile-title">Women in Parliament</div>
+              <div class="tile-title">Global Average by Context</div>
               <div class="tile-arrow" aria-hidden="true">➜</div>
             </a>
           </div>
@@ -215,9 +233,9 @@
             <div>
               <h4>About This Project</h4>
               <p>
-                This project visualizes global gender inequality using World
-                Bank data (2010–2024), comparing men and women in work and
-                leadership.
+                This project visualizes the impact of armed conflicts on children's 
+                right to education using global data (2010–2024), comparing out-of-school 
+                rates in conflict-affected and stable regions.
               </p>
             </div>
             <div>
@@ -235,12 +253,12 @@
             <div>
               <h4>Contact</h4>
               <div class="contact-icons" aria-hidden="true">
-                <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#000000">
+                <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#d7d7d7">
                   <path d="M796-120q-119 0-240-55.5T333-333Q231-435 175.5-556T120-796q0-18.86 12.57-31.43T164-840h147.33q14 0 24.34 9.83Q346-820.33 349.33-806l26.62 130.43q2.05 14.9-.62 26.24-2.66 11.33-10.82 19.48L265.67-530q24 41.67 52.5 78.5T381-381.33q35 35.66 73.67 65.5Q493.33-286 536-262.67l94.67-96.66q9.66-10.34 23.26-14.5 13.61-4.17 26.74-2.17L806-349.33q14.67 4 24.33 15.53Q840-322.27 840-308v144q0 18.86-12.57 31.43T796-120ZM233-592l76-76.67-21-104.66H187q3 41.66 13.67 86Q211.33-643 233-592Zm365.33 361.33q40.34 18.34 85.84 29.67 45.5 11.33 89.16 13.67V-288l-100-20.33-75 77.66ZM233-592Zm365.33 361.33Z"/>
                 </svg>
                 </span>
                 <span class="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#000000">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#d7d7d7">
                     <path d="M146.67-160q-27 0-46.84-19.83Q80-199.67 80-226.67v-506.66q0-27 19.83-46.84Q119.67-800 146.67-800h666.66q27 0 46.84 19.83Q880-760.33 880-733.33v506.66q0 27-19.83 46.84Q840.33-160 813.33-160H146.67ZM480-454.67 146.67-670v443.33h666.66V-670L480-454.67Zm0-66.66 330.67-212H150l330 212ZM146.67-670v-63.33V-226.67-670Z"/>
                   </svg>
                 </span>

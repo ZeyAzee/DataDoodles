@@ -1,0 +1,106 @@
+{
+  "chart": {
+    "title": "Number of armed conflicts",
+    "subtitle": "Included are [interstate](#dod:interstate-ucdp), [intrastate](#dod:intrastate-ucdp), [extrasystemic](#dod:extrasystemic-ucdp), [non-state](#dod:nonstate-ucdp) conflicts, and [one-sided violence](#dod:onesided-ucdp) that were ongoing that year.",
+    "note": "Some conflicts affect several regions. The sum across all regions can therefore be higher than the global number.",
+    "citation": "Uppsala Conflict Data Program (2025); geoBoundaries (2023)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/number-of-armed-conflicts?v=1&csvType=full&useColumnShortNames=false&utm_source=chatgpt.com",
+    "selection": [
+      "World"
+    ]
+  },
+  "columns": {
+    "Number of ongoing conflicts - Conflict type: one-sided violence": {
+      "titleShort": "One-sided violence",
+      "titleLong": "One-sided violence",
+      "descriptionShort": "Included is one-sided violence that was ongoing that year.",
+      "descriptionKey": [
+        "One-sided violence is defined by the [Uppsala Conflict Data Program (UCDP)](https://ucdp.uu.se/) as the use of armed force by a state or non-state armed group against civilians that causes at least 25 civilian deaths during a year.",
+        "UCDP identifies conflict deaths based on news reports, other contemporary sources, and academic research."
+      ],
+      "unit": "conflicts",
+      "timespan": "1989-2024",
+      "type": "Integer",
+      "owidVariableId": 1075409,
+      "shortName": "number_ongoing_conflicts__conflict_type_one_sided_violence",
+      "lastUpdated": "2025-06-13",
+      "citationShort": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data",
+      "citationLong": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data. “One-sided violence” [dataset]. Uppsala Conflict Data Program and Peace Research Institute Oslo, “Armed Conflict version 25.1”; Uppsala Conflict Data Program, “Georeferenced Event Dataset v25.1”; geoBoundaries, “geoBoundaries - Comprehensive Global Administrative Zones (CGAZ) 6.0.0” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1075409.metadata.json"
+    },
+    "Number of ongoing conflicts - Conflict type: extrasystemic": {
+      "titleShort": "Extrasystemic",
+      "titleLong": "Extrasystemic",
+      "descriptionShort": "Included are extrasystemic conflicts that were ongoing a year.",
+      "descriptionKey": [
+        "A colonial conflict is defined by the [Uppsala Conflict Data Program (UCDP)](https://ucdp.uu.se/) as a conflict between a state and a non-state armed group that causes at least 25 deaths during a year, and takes place outside of the state's territory. This includes combatant and civilian deaths due to fighting.",
+        "UCDP identifies conflict deaths based on news reports, other contemporary sources, and academic research."
+      ],
+      "unit": "conflicts",
+      "timespan": "1946-2024",
+      "type": "Integer",
+      "owidVariableId": 1075403,
+      "shortName": "number_ongoing_conflicts__conflict_type_extrasystemic",
+      "lastUpdated": "2025-06-13",
+      "citationShort": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data",
+      "citationLong": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data. “Extrasystemic” [dataset]. Uppsala Conflict Data Program and Peace Research Institute Oslo, “Armed Conflict version 25.1”; Uppsala Conflict Data Program, “Georeferenced Event Dataset v25.1”; geoBoundaries, “geoBoundaries - Comprehensive Global Administrative Zones (CGAZ) 6.0.0” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1075403.metadata.json"
+    },
+    "Number of ongoing conflicts - Conflict type: non-state conflict": {
+      "titleShort": "Non-state",
+      "titleLong": "Non-state",
+      "descriptionShort": "Included are non-state conflicts that were ongoing that year.",
+      "descriptionKey": [
+        "A non-state conflict is defined by the [Uppsala Conflict Data Program (UCDP)](https://ucdp.uu.se/) as a conflict between non-state armed groups, such as rebel groups, criminal organizations, or ethnic groups, that causes at least 25 deaths during a year. This includes combatant and civilian deaths due to fighting.",
+        "UCDP identifies conflict deaths based on news reports, other contemporary sources, and academic research."
+      ],
+      "unit": "conflicts",
+      "timespan": "1989-2024",
+      "type": "Integer",
+      "owidVariableId": 1075408,
+      "shortName": "number_ongoing_conflicts__conflict_type_non_state_conflict",
+      "lastUpdated": "2025-06-13",
+      "citationShort": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data",
+      "citationLong": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data. “Non-state” [dataset]. Uppsala Conflict Data Program and Peace Research Institute Oslo, “Armed Conflict version 25.1”; Uppsala Conflict Data Program, “Georeferenced Event Dataset v25.1”; geoBoundaries, “geoBoundaries - Comprehensive Global Administrative Zones (CGAZ) 6.0.0” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1075408.metadata.json"
+    },
+    "Number of ongoing conflicts - Conflict type: intrastate": {
+      "titleShort": "Intrastate",
+      "titleLong": "Intrastate",
+      "descriptionShort": "Included are intrastate conflicts that were ongoing a year.",
+      "descriptionKey": [
+        "A civil conflict is defined by the [Uppsala Conflict Data Program (UCDP)](https://ucdp.uu.se/) as a conflict between a state and a non-state armed group that causes at least 25 deaths during a year. A non-state armed group can be a rebel group, criminal organization, or ethnic group. Foreign states can still be involved in a supporting role. This includes combatant and civilian deaths due to fighting.",
+        "UCDP identifies conflict deaths based on news reports, other contemporary sources, and academic research."
+      ],
+      "unit": "conflicts",
+      "timespan": "1946-2024",
+      "type": "Integer",
+      "owidVariableId": 1075405,
+      "shortName": "number_ongoing_conflicts__conflict_type_intrastate",
+      "lastUpdated": "2025-06-13",
+      "citationShort": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data",
+      "citationLong": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data. “Intrastate” [dataset]. Uppsala Conflict Data Program and Peace Research Institute Oslo, “Armed Conflict version 25.1”; Uppsala Conflict Data Program, “Georeferenced Event Dataset v25.1”; geoBoundaries, “geoBoundaries - Comprehensive Global Administrative Zones (CGAZ) 6.0.0” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1075405.metadata.json"
+    },
+    "Number of ongoing conflicts - Conflict type: interstate": {
+      "titleShort": "Interstate",
+      "titleLong": "Interstate",
+      "descriptionShort": "Included are interstate conflicts that were ongoing a year.",
+      "descriptionKey": [
+        "An interstate conflict is defined by the [Uppsala Conflict Data Program (UCDP)](https://ucdp.uu.se/) as a conflict between states that causes at least 25 deaths during a year. This includes combatant and civilian deaths due to fighting.",
+        "UCDP identifies conflict deaths based on news reports, other contemporary sources, and academic research."
+      ],
+      "unit": "conflicts",
+      "timespan": "1946-2024",
+      "type": "Integer",
+      "owidVariableId": 1075404,
+      "shortName": "number_ongoing_conflicts__conflict_type_interstate",
+      "lastUpdated": "2025-06-13",
+      "citationShort": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data",
+      "citationLong": "Uppsala Conflict Data Program and Peace Research Institute Oslo (2025); geoBoundaries (2023) – processed by Our World in Data. “Interstate” [dataset]. Uppsala Conflict Data Program and Peace Research Institute Oslo, “Armed Conflict version 25.1”; Uppsala Conflict Data Program, “Georeferenced Event Dataset v25.1”; geoBoundaries, “geoBoundaries - Comprehensive Global Administrative Zones (CGAZ) 6.0.0” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1075404.metadata.json"
+    }
+  },
+  "dateDownloaded": "2025-11-10",
+  "activeFilters": {}
+}

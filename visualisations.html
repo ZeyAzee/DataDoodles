@@ -57,10 +57,13 @@
       <section class="title-block">
         <div class="container">
           <h1>Data Visualisation</h1>
+        </div>
+      </section>
+      <section class="title-section">
+        <div class="container">
+          <h2>Comparing Countries and Contexts</h2>
           <p class="sub">
-            Interactive charts and visual stories revealing gender inequality
-            trends and women’s economic participation across the world from 2010
-            to 2024.
+            Conflict vs Stable — where do children miss school most?
           </p>
         </div>
       </section>
@@ -68,74 +71,157 @@
       <div class="notice-banner">
         <div class="container">
           <p>
-            The following visualizations highlight key dimensions of gender
-            inequality across countries and over time. Each chart focuses on a
-            different aspect of women’s economic status — from employment and
-            labor force participation to political representation. The data
-            comes from the World Bank’s Gender Statistics and has been carefully
-            cleaned and processed to ensure accuracy and comparability across
-            nations.
+            Here we compare countries across time to see how conflict correlates
+            with school exclusion. We summarize levels, trends, and relative
+            shares to reveal systematic gaps between conflict and stable
+            settings. Together, these views show both the scale and persistence
+            of the education crisis during war.
           </p>
         </div>
       </div>
 
       <section class="gallery">
         <div class="container">
-          <h2>All Visualisations</h2>
           <div class="cards">
-            <a href="#" class="viz-card" data-chart="Barchart" id="viz-barchart">
+            <a
+              href="#"
+              class="viz-card"
+              data-chart="Barchart"
+              id="viz-barchart"
+            >
               <div class="viz-canvas">chart</div>
               <div class="viz-footer">
-                <h4>Female Employment Rate (2010)</h4>
+                <h4>Bar chart — average (2018–2023)</h4>
                 <p>
-                  Comparison of female employment rates (as a percentage of the female population) 
-                  in different countries based on 2010 data.
+                  This bar chart ranks countries by the average out-of-school
+                  rate in recent years (2018–2023). Conflict-affected nations
+                  (e.g., Sudan, Syria) sit far above stable peers (e.g.,
+                  Germany, Japan), highlighting how violence systematically
+                  disrupts schooling.
                 </p>
               </div>
             </a>
-            <a href="#" class="viz-card" data-chart="Grouped Barchart" id="viz-grouped-barchart">
+            <a
+              href="#"
+              class="viz-card"
+              data-chart="Grouped Barchart"
+              id="viz-grouped-barchart"
+            >
               <div class="viz-canvas">chart</div>
               <div class="viz-footer">
-                <h4>Employment Rate by Sex (2010)</h4>
+                <h4>Grouped bar — yearly by country (2010–2024)</h4>
                 <p>
-                  A direct comparison of employment rates among women and men, 
-                  highlighting the gender gap in labor force participation.
+                  Each country’s bars show year-by-year out-of-school rates. The
+                  contrast between <b>Conflict</b> and <b>Stable</b> contexts
+                  persists over time, with slower recoveries and higher
+                  volatility in conflict settings.
                 </p>
               </div>
             </a>
             <a href="#" class="viz-card" data-chart="Heatmap" id="viz-heatmap">
               <div class="viz-canvas">chart</div>
               <div class="viz-footer">
-                <h4>Gender Employment Gap (2010-2024)</h4>
+                <h4>Heatmap — countries × years (2010–2024)</h4>
                 <p>
-                  Heat map showing how the percentage gap in employment changed from 2010 to 2024. 
-                  Darker shades indicate a larger gap.
+                  Darker cells mean more children out of school. Conflict zones
+                  cluster with sustained high values, while stable countries
+                  remain near zero, making the temporal footprint of conflict
+                  immediately visible.
                 </p>
               </div>
             </a>
-            <a href="#" class="viz-card" data-chart="100% Stacked Barchart" id="viz-stacked-barchart">
+            <a
+              href="#"
+              class="viz-card"
+              data-chart="100% Stacked Barchart"
+              id="viz-stacked-barchart"
+            >
               <div class="viz-canvas">chart</div>
               <div class="viz-footer">
-                <h4>Labor Force Composition (2024)</h4>
+                <h4>100% stacked bar — share of contexts per year</h4>
                 <p>
-                  A diagram showing the proportion (composition) of the workforce by gender. 
-                  It illustrates what percentage of the total number of workers are women and men.
+                  For each year, the chart shows the proportion of selected
+                  countries experiencing conflict versus those that are stable.
+                  It links shifts in the global conflict landscape to the
+                  education gap
                 </p>
               </div>
             </a>
-            <a href="#" class="viz-card" data-chart="Waffle Chart" id="viz-waffle-chart">
+            <a
+              href="#"
+              class="viz-card"
+              data-chart="Waffle Chart"
+              id="viz-waffle-chart"
+            >
               <div class="viz-canvas">chart</div>
               <div class="viz-footer">
-                <h4>Women in Parliament (2024)</h4>
+                <h4>Waffle chart — global averages by context</h4>
                 <p>
-                  A “waffle” chart showing the proportion of seats held by women in the parliaments 
-                  of individual countries in 2024. Each square represents 1%.
+                  On average, children in conflict settings are several times
+                  more likely to be out of school than those in stable contexts,
+                  summarizing the overall burden of conflict on learning
                 </p>
               </div>
             </a>
-            <a href="#" class="viz-card placeholder">
-              <div class="viz-canvas">Coming Soon...</div>
-              <div class="viz-footer">&nbsp;</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="title-section">
+        <div class="container">
+          <h2>What the distributions reveal</h2>
+          <p class="sub">Beyond averages — the full spread of exclusion</p>
+        </div>
+      </section>
+
+      <div class="notice-banner">
+        <div class="container">
+          <p>
+            Averages can hide the shape of the problem. These distribution
+            charts show the spread, skew, and outliers of out-of-school rates.
+            Conflict settings don’t just have higher central values — they also
+            show wider dispersion, meaning more frequent and severe extremes.
+          </p>
+        </div>
+      </div>
+
+      <section class="gallery">
+        <div class="container">
+          <div class="cards">
+            <a href="#" class="viz-card" data-chart="Histogram" id="viz-histogram">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">
+                <h4>Histogram (Conflict vs Stable)</h4>
+                <p>
+                  This histogram compares frequency across bins of out-of-school
+                  rates. Conflict observations pile up at higher percentages and
+                  show a heavier tail, indicating more severe and recurrent
+                  exclusion.
+                </p>
+              </div>
+            </a>
+            <a href="#" class="viz-card" data-chart="Violin Plot" id="viz-violin">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">
+                <h4>Violin plot (by context, 2010–2024)</h4>
+                <p>
+                  Each violin displays the full distribution for Conflict vs
+                  Stable. Conflict violins are taller and thicker at higher
+                  values, capturing both greater inequality and a higher typical
+                  level of exclusion.
+                </p>
+              </div>
+            </a>
+            <a href="#" class="viz-card" data-chart="Boxplot" id="viz-boxplot">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">
+                <h4>Boxplot (by context, 2010–2024)</h4>
+                <p>
+                  Medians and IQRs confirm the gap: conflict settings have a higher 
+                  center and wider spread. Whiskers and outliers show extreme episodes 
+                  of school loss during escalation periods.
+                </p>
+              </div>
             </a>
           </div>
         </div>
@@ -147,9 +233,9 @@
             <div>
               <h4>About This Project</h4>
               <p>
-                This project visualizes global gender inequality using World
-                Bank data (2010–2024), comparing men and women in work and
-                leadership.
+                This project visualizes the impact of armed conflicts on children's 
+                right to education using global data (2010–2024), comparing out-of-school 
+                rates in conflict-affected and stable regions.
               </p>
             </div>
             <div>
@@ -167,8 +253,15 @@
             <div>
               <h4>Contact</h4>
               <div class="contact-icons" aria-hidden="true">
-                <span class="icon">✉</span>
-                <span class="icon">💬</span>
+                <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#d7d7d7">
+                  <path d="M796-120q-119 0-240-55.5T333-333Q231-435 175.5-556T120-796q0-18.86 12.57-31.43T164-840h147.33q14 0 24.34 9.83Q346-820.33 349.33-806l26.62 130.43q2.05 14.9-.62 26.24-2.66 11.33-10.82 19.48L265.67-530q24 41.67 52.5 78.5T381-381.33q35 35.66 73.67 65.5Q493.33-286 536-262.67l94.67-96.66q9.66-10.34 23.26-14.5 13.61-4.17 26.74-2.17L806-349.33q14.67 4 24.33 15.53Q840-322.27 840-308v144q0 18.86-12.57 31.43T796-120ZM233-592l76-76.67-21-104.66H187q3 41.66 13.67 86Q211.33-643 233-592Zm365.33 361.33q40.34 18.34 85.84 29.67 45.5 11.33 89.16 13.67V-288l-100-20.33-75 77.66ZM233-592Zm365.33 361.33Z"/>
+                </svg>
+                </span>
+                <span class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#d7d7d7">
+                    <path d="M146.67-160q-27 0-46.84-19.83Q80-199.67 80-226.67v-506.66q0-27 19.83-46.84Q119.67-800 146.67-800h666.66q27 0 46.84 19.83Q880-760.33 880-733.33v506.66q0 27-19.83 46.84Q840.33-160 813.33-160H146.67ZM480-454.67 146.67-670v443.33h666.66V-670L480-454.67Zm0-66.66 330.67-212H150l330 212ZM146.67-670v-63.33V-226.67-670Z"/>
+                  </svg>
+                </span>
               </div>
             </div>
           </div>

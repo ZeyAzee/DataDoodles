@@ -1,0 +1,13 @@
+conflict_status,level_1,out_of_school_pct
+Conflict,count,49.0
+Conflict,median,16.26054
+Conflict,q1,5.49729
+Conflict,q3,31.06999
+Conflict,whisker_low,0.94957
+Conflict,whisker_high,48.59767
+Stable,count,46.0
+Stable,median,1.202205
+Stable,q1,0.4833225
+Stable,q3,3.92504
+Stable,whisker_low,0.03021
+Stable,whisker_high,9.08761625

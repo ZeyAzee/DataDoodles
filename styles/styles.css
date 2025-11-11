@@ -1,12 +1,11 @@
 /* Base */
 :root {
-  --bg: #ffffff;
-  --text: #252525;
+  --bg: #2B2B2B;
+  --text: #d7d7d7;
   --muted: #6b6b6b;
-  --line: rgba(98, 57, 138, 0.55);
+  --line: #441d1d;
   --brand-50: #f1e6fb;
-  --brand-300: #c5a5e6;
-  --brand-500: #a879d6;
+  --brand-500: #1a1a1a;
 }
 * {
   box-sizing: border-box;
@@ -27,7 +26,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("../img/background2.png");
+  /*background-image: url("../img/background2.png");*/
   background-size: cover;
   background-repeat: no-repeat;
   background-position: right top;
@@ -47,7 +46,7 @@ body::before {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: linear-gradient(180deg, var(--brand-500), var(--brand-300));
+  background: var(--brand-500);
   color: #fff;
 }
 .header-inner {
@@ -60,7 +59,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #fff;
+  color: #adadad;
   text-decoration: none;
   font-weight: 600;
 }
@@ -73,7 +72,7 @@ body::before {
   letter-spacing: 0.2px;
 }
 .nav a {
-  color: #fff;
+  color: #adadad;
   text-decoration: none;
   margin-left: 28px;
   font-weight: 500;
@@ -86,7 +85,11 @@ body::before {
 
 /* Hero */
 .hero {
-  padding: 56px 0 24px;
+  min-height: 450px;
+  padding: 180px 0 24px;
+  color: #c4c0c0;
+  background-image: url(../img/Gemini_Generated_Image_hb5w74hb5w74hb5w.png);
+  background-size: cover;
 }
 .hero h1 {
   font-size: 44px;
@@ -95,7 +98,7 @@ body::before {
   max-width: 900px;
 }
 .meta .muted {
-  color: #2d0c4c;
+  color: #9e9191;
   font-weight: 700;
 }
 .meta p {
@@ -112,7 +115,7 @@ body::before {
 .lead {
   max-width: 980px;
   line-height: 1.55;
-  color: #3a3a3a;
+  color: #c3b5b5;
 }
 
 /* Methodology */
@@ -137,22 +140,29 @@ body::before {
   min-height: 220px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(151, 151, 151, 0.85);
   padding: 18px;
 }
 .card.big h3 {
   margin: 0;
-  color: #2d0c4c;
+  color: #581a1a;
   font-weight: 600;
 }
 .card.list h4 {
-  color: #3c3350;
+  color: #390000;
   font-weight: 600;
 }
 
 /* Filters */
 .filters{
   margin-top: 18px;
+}
+.filters.list h4 {
+  font-weight: 300;
+}
+.filters.list b {
+  font-weight: 600;
+  color: #c3b5b5;
 }
 
 /* Analysis tiles */
@@ -161,6 +171,10 @@ body::before {
 }
 .analysis h2 {
   margin-bottom: 16px;
+}
+.an_t {
+  margin-top: 30px;
+  margin-bottom: 5px;
 }
 .grid.two.five-at-xl {
   grid-template-columns: 1fr;
@@ -184,14 +198,14 @@ body::before {
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 22px 22px 18px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(151, 151, 151, 0.85);
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .tile:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(55, 20, 95, 0.12);
+  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.496);
 }
 .tile-icon {
   height: 40px;
@@ -204,7 +218,7 @@ body::before {
   right: 18px;
   bottom: 12px;
   font-size: 28px;
-  color: #3c3350;
+  color: #4e1010;
 }
 
 /* Footer */
@@ -231,7 +245,7 @@ body::before {
 }
 .site-footer p {
   margin: 0;
-  color: #444;
+  color: #a3a3a3;
   max-width: 560px;
 }
 ul.plain {
@@ -244,8 +258,8 @@ ul.plain li {
 }
 ul.plain a {
   text-decoration: none;
-  color: #312049;
-  border-bottom: 1px dashed rgba(98, 57, 138, 0.5);
+  color: #a3a3a3;
+  border-bottom: 1px dashed rgba(255, 102, 102, 0.5);
 }
 ul.plain a:hover {
   border-bottom-style: solid;
@@ -257,10 +271,10 @@ ul.plain a:hover {
 .copyright {
   font-size: 12px;
   text-align: center;
-  color: #555;
+  color: #a3a3a3;
   padding: 12px 0;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
-  background: #f8f4fb;
+  background: var(--brand-500);
 }
 
 /* Headings */

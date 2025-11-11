@@ -1,10 +1,11 @@
 :root {
-  --bg: #ffffff;
-  --text: #222;
-  --muted: #646464;
-  --line: rgba(98, 57, 138, 0.55);
-  --brand-500: #a879d6;
-  --banner: #b991d9;
+  --bg: #2b2b2b;
+  --text: #c4c0c0;
+  --muted: #a1a1a1;
+  --line: #441d1d;
+  --brand-500: #1a1a1a;
+  --banner: rgba(43, 24, 24, 0.4);
+  
 }
 * {
   box-sizing: border-box;
@@ -24,7 +25,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("../img/background2.png");
+  /*background-image: url("../img/background2.png");*/
   background-size: cover;
   background-repeat: no-repeat;
   background-position: right top;
@@ -42,7 +43,7 @@ body::before {
 .site-header {
   position: sticky;
   top: 0;
-  background: #fff;
+  background: var(--brand-500);
   z-index: 10;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
@@ -56,29 +57,28 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #111;
+  color: #adadad;
   text-decoration: none;
   font-weight: 600;
 }
 .brand .logo {
   display: grid;
   place-items: center;
-  color: #5a407f;
 }
 .brand-name {
   font-size: 18px;
+  letter-spacing: 0.2px;
 }
 .nav a {
-  color: #111;
+  color: #adadad;
   text-decoration: none;
   margin-left: 28px;
-  opacity: 0.9;
-}
-.nav a.active {
-  text-decoration: underline;
+  font-weight: 500;
+  opacity: 0.95;
 }
 .nav a:hover {
   opacity: 1;
+  text-decoration: underline;
 }
 
 /* Title */
@@ -86,20 +86,32 @@ body::before {
   padding: 40px 0 16px;
 }
 .title-block h1 {
-  font-size: 40px;
+  font-size: 50px;
   line-height: 1.15;
-  margin: 0 0 14px;
+  margin: 0;
 }
 .title-block .sub {
   margin: 0;
-  color: #333;
+  color: var(--muted);
   max-width: 760px;
+}
+/* Title section */
+.title-section h2 {
+  font-size: 30px;
+  line-height: 2;
+  margin: 0;
+}
+.title-section .sub {
+  margin: 0;
+  color: var(--muted);
+  max-width: 760px;
+  font-size: 18px;
 }
 
 /* Banner */
 .notice-banner {
   background: var(--banner);
-  color: #fff;
+  color: var(--text);
   margin: 24px 0;
 }
 .notice-banner .container {
@@ -115,10 +127,7 @@ body::before {
 /* Gallery */
 .gallery {
   padding: 16px 0;
-}
-.gallery h2 {
-  font-size: 24px;
-  margin: 0 0 16px;
+  margin-bottom: 40px;
 }
 .cards {
   display: grid;
@@ -129,6 +138,11 @@ body::before {
   .cards {
     grid-template-columns: 1fr 1fr;
   }
+  .viz-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 14px);
+    justify-self: center;
+  }
 }
 
 .viz-card {
@@ -137,14 +151,14 @@ body::before {
   border: 1px solid var(--line);
   border-radius: 6px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--banner);
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .viz-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(55, 20, 95, 0.12);
+  box-shadow: 0 6px 16px rgba(133, 0, 0, 0.223);
 }
 .viz-canvas {
   min-height: 220px;
@@ -155,14 +169,14 @@ body::before {
 }
 
 .viz-footer {
-  font-weight: 400; 
+  font-weight: 400;
   padding: 16px 20px;
 }
 
 .viz-footer h4 {
   margin: 0 0 6px 0;
   font-size: 17px;
-  color: var(--text);
+  color: #c4c0c0;
   font-weight: 600;
 }
 
@@ -178,15 +192,14 @@ body::before {
 }
 
 .viz-card.placeholder .viz-canvas {
-  flex-grow: 1; 
-  border-top: none; 
-  min-height: 270px; 
+  flex-grow: 1;
+  border-top: none;
+  min-height: 270px;
 }
 
 .viz-card.placeholder .viz-footer {
-  display: none; 
+  display: none;
 }
-
 
 /* Footer */
 .site-footer {
@@ -212,7 +225,7 @@ body::before {
 }
 .site-footer p {
   margin: 0;
-  color: #444;
+  color: #a3a3a3;
   max-width: 560px;
 }
 ul.plain {
@@ -225,8 +238,8 @@ ul.plain li {
 }
 ul.plain a {
   text-decoration: none;
-  color: #312049;
-  border-bottom: 1px dashed rgba(98, 57, 138, 0.5);
+  color: #a3a3a3;
+  border-bottom: 1px dashed rgba(255, 102, 102, 0.5);
 }
 ul.plain a:hover {
   border-bottom-style: solid;
@@ -234,15 +247,14 @@ ul.plain a:hover {
 .contact-icons {
   display: flex;
   gap: 16px;
-  font-size: 22px;
 }
 .copyright {
   font-size: 12px;
   text-align: center;
-  color: #555;
+  color: #6e6e6e;
   padding: 12px 0;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
-  background: #f8f4fb;
+  background: var(--brand-500);
 }
 
 /* Small tweaks */

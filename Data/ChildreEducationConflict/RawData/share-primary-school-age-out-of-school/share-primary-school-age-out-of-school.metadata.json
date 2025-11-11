@@ -1,0 +1,41 @@
+{
+  "chart": {
+    "title": "Share of primary-school-age children who are out of school",
+    "subtitle": "Percentage of primary-school-age children who are not enrolled in [primary](#dod:primary-education) or [secondary](#dod:secondary-education) school.",
+    "citation": "UNESCO Institute for Statistics (2025)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/share-primary-school-age-out-of-school?v=1&csvType=full&useColumnShortNames=false&utm_source=chatgpt.com",
+    "selection": [
+      "Morocco",
+      "Burundi"
+    ]
+  },
+  "columns": {
+    "Out-of-school rate for children of primary school age": {
+      "titleShort": "Out-of-school rate for children of primary school age",
+      "titleLong": "Out-of-school rate for children of primary school age",
+      "descriptionShort": "Percentage of children in the official primary school age group who are not enrolled in any level of education.",
+      "descriptionKey": [
+        "Many children and adolescents around the world are not in school, even though they are old enough to be. This indicator shows how many are missing out on education at each stage of the system.",
+        "It measures the share of individuals in the official age range for a given level of education who are not enrolled at that level of education.",
+        "These children or adolescents may have never entered school, may have dropped out, or may be starting later than expected.",
+        "A share of 10% for children out of primary school means that 90% of all 6- to 11-year-olds are enrolled in primary education.",
+        "High out-of-school rates signal barriers to access — such as poverty, gender inequality, location, or limited availability of schools — and highlight where more targeted support is needed.",
+        "The data comes from administrative school enrolment records and household surveys, which provide age-specific insights when compared to population estimates.",
+        "As with all education data, results should be interpreted carefully. Differences in how enrolment is defined, inconsistencies in age reporting, and timing of data collection (such as during holidays or late in the school year) can affect accuracy."
+      ],
+      "shortUnit": "%",
+      "unit": "%",
+      "timespan": "1970-2024",
+      "type": "Numeric",
+      "owidVariableId": 1030188,
+      "shortName": "out_of_school_rate_for_children_of_primary_school_age__both_sexes__pct__rofst_1_cp",
+      "lastUpdated": "2025-05-01",
+      "nextUpdate": "2026-05-01",
+      "citationShort": "UNESCO Institute for Statistics (2025) – with minor processing by Our World in Data",
+      "citationLong": "UNESCO Institute for Statistics (2025) – with minor processing by Our World in Data. “Out-of-school rate for children of primary school age” [dataset]. UNESCO Institute for Statistics, “UNESCO Institute for Statistics (UIS) - Education” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1030188.metadata.json"
+    }
+  },
+  "dateDownloaded": "2025-11-10",
+  "activeFilters": {}
+}
