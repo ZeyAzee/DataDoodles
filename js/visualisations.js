@@ -1,63 +1,119 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Новая палитра, соответствующая теме "конфликт/стабильность" и темному режиму
   const COLORS = {
-    // Цвета для статуса
-    conflict: "#e41a1c", // Красный
-    stable: "#377eb8", // Синий
+    // colors for status
+    conflict: "#e41a1c", // red
+    stable: "#377eb8", // blue
 
-    // Градиент для тепловой карты (от желтого к красному)
     heatmap: d3.interpolateYlOrRd,
 
-    // Цвет для фона "пустых" ячеек вафельного графика
+    // color for "empty" cells
     waffleBg: "#444444",
 
     // Цвет текста (из вашего CSS)
     text: "#c4c0c0",
   };
 
-  // Выбираем все карточки визуализаций
+  // choose allvisualisations card
   const vizCards = document.querySelectorAll(".viz-card");
 
   vizCards.forEach((card) => {
     const canvas = card.querySelector(".viz-canvas");
     const footer = card.querySelector(".viz-footer");
 
-    // Пропускаем плейсхолдер "Coming Soon"
+    //skip "Coming Soon"
     if (!canvas || !footer || canvas.textContent.includes("Coming Soon")) {
       return;
     }
 
     const chartType = card.dataset.chart;
-    canvas.innerHTML = ""; // Очищаем 'chart'
+    canvas.innerHTML = ""; // clean 'chart'
 
-    // Вызываем соответствующую функцию отрисовки
+    // call appropriate drawing function
     try {
       switch (chartType) {
         case "Barchart":
-          drawBarchart(canvas, "Data/ChildreEducationConflict/ChartData/bar_out_of_school.csv", COLORS);
+          drawBarchart(
+            canvas,
+            "Data/ChildreEducationConflict/ChartData/bar_out_of_school.csv",
+            COLORS
+          );
           break;
         case "Grouped Barchart":
-          // Эта функция была полностью переписана для обработки данных
-          // grouped_country_year.csv
-          drawGroupedBarchart(canvas, "Data/ChildreEducationConflict/ChartData/grouped_country_year.csv", COLORS);
+          drawGroupedBarchart(
+            canvas,
+            "Data/ChildreEducationConflict/ChartData/grouped_country_year.csv",
+            COLORS
+          );
           break;
         case "Heatmap":
-          drawHeatmap(canvas, "Data/ChildreEducationConflict/ChartData/heatmap_out_of_school.csv", COLORS);
+          drawHeatmap(
+            canvas,
+            "Data/ChildreEducationConflict/ChartData/heatmap_out_of_school.csv",
+            COLORS
+          );
           break;
         case "100% Stacked Barchart":
-          drawStackedBarchart(canvas, "Data/ChildreEducationConflict/ChartData/stacked100_conflict_share.csv", COLORS);
+          drawStackedBarchart(
+            canvas,
+            "Data/ChildreEducationConflict/ChartData/stacked100_conflict_share.csv",
+            COLORS
+          );
           break;
         case "Waffle Chart":
-          drawWaffleChart(canvas, "Data/ChildreEducationConflict/ChartData/waffle_global_avg.csv", COLORS);
+          drawWaffleChart(
+            canvas,
+            "Data/ChildreEducationConflict/ChartData/waffle_global_avg.csv",
+            COLORS
+          );
           break;
-          case "Histogram":
-          drawHistogram(canvas, "Data/ChildreEducationConflict/DistributionData/histogram.csv", COLORS);
+        case "Histogram":
+          drawHistogram(
+            canvas,
+            "Data/ChildreEducationConflict/DistributionData/histogram.csv",
+            COLORS
+          );
           break;
         case "Violin Plot":
-          drawViolinPlot(canvas, "Data/ChildreEducationConflict/DistributionData/violin_box_raw.csv", COLORS);
+          drawViolinPlot(
+            canvas,
+            "Data/ChildreEducationConflict/DistributionData/violin_box_raw.csv",
+            COLORS
+          );
           break;
         case "Boxplot":
-          drawBoxplot(canvas, "Data/ChildreEducationConflict/DistributionData/box_summary.csv", COLORS);
+          drawBoxplot(
+            canvas,
+            "Data/ChildreEducationConflict/DistributionData/box_summary.csv",
+            COLORS
+          );
+          break;
+        case "Ridgeline Plot":
+          drawRidgelinePlot(
+            canvas,
+            "Data/ChildreEducationConflict/TimeLine/histogram_country_time.csv",
+            COLORS
+          );
+          break;
+        case "Streamgraph":
+          drawStreamgraph(
+            canvas,
+            "Data/ChildreEducationConflict/TimeLine/violin_box_raw.csv",
+            COLORS
+          );
+          break;
+        case "Horizon Multiples":
+          drawHorizonMultiples(
+            canvas,
+            "Data/ChildreEducationConflict/TimeLine/violin_box_raw.csv",
+            COLORS
+          );
+          break;
+        case "Bump Chart":
+          drawBumpChart(
+            canvas,
+            "Data/ChildreEducationConflict/TimeLine/box_summary_country_time.csv",
+            COLORS
+          );
           break;
       }
     } catch (error) {
@@ -70,17 +126,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * ========================================================================
- * 1. Barchart: Средний процент по странам
+ * 1. Barchart: average out-of-school % by country
  * Файл: bar_out_of_school.csv
  * ========================================================================
  */
 async function drawBarchart(container, dataUrl, COLORS) {
   const data = await d3.csv(dataUrl, d3.autoType);
-  
-  // Сортируем данные по убыванию
-  data.sort((a, b) =>
-    d3.descending(a.out_of_school_pct, b.out_of_school_pct)
-  );
+
+  // sorting data by out_of_school_pct descending
+  data.sort((a, b) => d3.descending(a.out_of_school_pct, b.out_of_school_pct));
 
   const margin = { top: 30, right: 30, bottom: 120, left: 70 };
   const totalWidth = 500;
@@ -108,7 +162,7 @@ async function drawBarchart(container, dataUrl, COLORS) {
     .nice()
     .range([height, 0]);
 
-  // Ось X (Страны)
+  // axis X (Countries)
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
@@ -118,7 +172,7 @@ async function drawBarchart(container, dataUrl, COLORS) {
     .style("text-anchor", "end")
     .style("fill", COLORS.text);
 
-  // Ось Y (Проценты)
+  // axis Y (Percentages)
   svg
     .append("g")
     .call(
@@ -130,7 +184,7 @@ async function drawBarchart(container, dataUrl, COLORS) {
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // Подпись оси Y
+  // text Y axis
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
@@ -142,7 +196,7 @@ async function drawBarchart(container, dataUrl, COLORS) {
     .style("font-size", "12px")
     .text("Avg. Out-of-School %");
 
-  // Столбцы
+  // create bars
   svg
     .selectAll(".bar")
     .data(data)
@@ -153,31 +207,29 @@ async function drawBarchart(container, dataUrl, COLORS) {
     .attr("y", (d) => y(d.out_of_school_pct))
     .attr("width", x.bandwidth())
     .attr("height", (d) => height - y(d.out_of_school_pct))
-    // Цвет в зависимости от статуса
+    // color by conflict status
     .attr("fill", (d) =>
       d.conflict_status === "Conflict" ? COLORS.conflict : COLORS.stable
     )
     .append("title")
     .text(
       (d) =>
-        `${d.country} (${d.conflict_status}): ${d.out_of_school_pct.toFixed(1)}%`
+        `${d.country} (${d.conflict_status}): ${d.out_of_school_pct.toFixed(
+          1
+        )}%`
     );
 }
 
 /**
  * ========================================================================
- * 2. Grouped Barchart: Средние по статусу (Conflict vs Stable)
- * Файл: grouped_country_year.csv
- *
- * ПРИМЕЧАНИЕ: Данные в `grouped_country_year.csv` - это временной ряд.
- * Группированный барный график здесь лучше всего подходит для
- * сравнения СРЕДНЕГО 'Conflict' и 'Stable' процента для каждой страны.
+ * 2. Grouped Barchart: average by status (Conflict vs Stable)
+ * file: grouped_country_year.csv
  * ========================================================================
  */
 async function drawGroupedBarchart(container, dataUrl, COLORS) {
   const data = await d3.csv(dataUrl, d3.autoType);
 
-  // 1. Агрегируем данные: вычисляем средний % для 'Conflict' и 'Stable' по каждой стране
+  // aggregate average out_of_school_pct by country and conflict_status
   const statusAvgs = d3.rollup(
     data,
     (v) => d3.mean(v, (d) => d.out_of_school_pct),
@@ -185,18 +237,18 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     (d) => d.conflict_status
   );
 
-  // 2. Преобразуем сгруппированные данные в плоский массив
+  // transform to array of objects for easier plotting
   const groupedData = Array.from(statusAvgs.entries()).map(
     ([country, values]) => {
       return {
         country: country,
-        Conflict: values.get("Conflict") || 0, // 0, если у страны не было 'Conflict' лет
-        Stable: values.get("Stable") || 0, // 0, если не было 'Stable' лет
+        Conflict: values.get("Conflict") || 0, // 0, if no 'Conflict' years
+        Stable: values.get("Stable") || 0, // 0, if no 'Stable' years
       };
     }
   );
 
-  // Сортируем по суммарному % (для наглядности)
+  //sort by total avg descending
   groupedData.sort((a, b) =>
     d3.descending(a.Conflict + a.Stable, b.Conflict + b.Stable)
   );
@@ -217,34 +269,34 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Шкала X0 (для стран)
+  // scale X0 (for countries)
   const x0 = d3
     .scaleBand()
     .domain(groupedData.map((d) => d.country))
     .rangeRound([0, width])
     .paddingInner(0.1);
 
-  // Шкала X1 (для 'Conflict' и 'Stable' внутри страны)
+  // scale X1 (for 'Conflict' and 'Stable' within country)
   const x1 = d3
     .scaleBand()
     .domain(keys)
     .rangeRound([0, x0.bandwidth()])
     .padding(0.05);
 
-  // Шкала Y
+  // scale Y
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(groupedData, (d) => Math.max(d.Conflict, d.Stable))])
     .nice()
     .rangeRound([height, 0]);
 
-  // Цветовая шкала
+  // color scale
   const color = d3
     .scaleOrdinal()
     .domain(keys)
     .range([COLORS.conflict, COLORS.stable]);
 
-  // Ось X
+  // axis X
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
@@ -254,7 +306,7 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     .style("text-anchor", "end")
     .style("fill", COLORS.text);
 
-  // Ось Y
+  // axis Y
   svg
     .append("g")
     .call(
@@ -265,8 +317,8 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     )
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
-    
-  // Подпись оси Y
+
+  // text Y axis
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
@@ -278,7 +330,7 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     .style("font-size", "12px")
     .text("Avg. Out-of-School %");
 
-  // Группы столбцов
+  // groups of bars
   const groups = svg
     .selectAll(".group")
     .data(groupedData)
@@ -287,10 +339,12 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     .attr("class", "group")
     .attr("transform", (d) => `translate(${x0(d.country)},0)`);
 
-  // Столбцы внутри групп
+  // bars in groups
   groups
     .selectAll("rect")
-    .data((d) => keys.map((key) => ({ key, value: d[key], country: d.country })))
+    .data((d) =>
+      keys.map((key) => ({ key, value: d[key], country: d.country }))
+    )
     .enter()
     .append("rect")
     .attr("x", (d) => x1(d.key))
@@ -301,10 +355,9 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     .append("title")
     .text((d) => `${d.country} (${d.key}): ${d.value.toFixed(1)}%`);
 
-  // Легенда
   const legend = svg
     .append("g")
-    .attr("transform", `translate(${width - 100}, -35)`); // Сдвигаем
+    .attr("transform", `translate(${width - 100}, -35)`);
 
   keys.forEach((key, i) => {
     const legendRow = legend
@@ -320,7 +373,7 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
     legendRow
       .append("text")
       .attr("x", 20)
-      .attr("y", 7.5) // Центрируем текст
+      .attr("y", 7.5)
       .attr("dominant-baseline", "middle")
       .text(key)
       .style("font-size", "12px")
@@ -330,21 +383,21 @@ async function drawGroupedBarchart(container, dataUrl, COLORS) {
 
 /**
  * ========================================================================
- * 3. Heatmap: Страны × Годы
- * Файл: heatmap_out_of_school.csv
+ * 3. Heatmap: country x year
+ * file: heatmap_out_of_school.csv
  * ========================================================================
  */
 async function drawHeatmap(container, dataUrl, COLORS) {
   const data = await d3.csv(dataUrl, d3.autoType);
 
-  // 1. Преобразуем "широкие" данные в "длинные"
-  // Годы берем из колонок, исключая 'country'
+  // transform data to long format
+  // pick all years from columns (excluding 'country')
   const allYears = data.columns.slice(1);
-  
-  // Отфильтруем годы, где все значения 0 (как 2023, 2024 в примере)
-  const relevantYears = allYears.filter(year => {
-    // Проверяем, есть ли хоть одно ненулевое значение в этом году
-    return data.some(d => d[year] > 0);
+
+  // filter years to only those with at least one value > 0
+  const relevantYears = allYears.filter((year) => {
+    // check if any country has a value > 0 for this year
+    return data.some((d) => d[year] > 0);
   });
 
   const longData = data.flatMap((d) =>
@@ -358,9 +411,9 @@ async function drawHeatmap(container, dataUrl, COLORS) {
   const countries = [...new Set(longData.map((d) => d.country))].sort(
     d3.ascending
   );
-  
-  // 2. Настройка SVG и Шкал
-  const margin = { top: 40, right: 20, bottom: 80, left: 90 }; // Увеличено слева
+
+  // setup SVG and scales
+  const margin = { top: 40, right: 20, bottom: 80, left: 90 };
   const totalWidth = 550;
   const totalHeight = 450;
   const width = totalWidth - margin.left - margin.right;
@@ -374,36 +427,40 @@ async function drawHeatmap(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Шкала X (Годы)
-  const x = d3.scaleBand().domain(relevantYears).range([0, width]).padding(0.05);
+  // scale X (Years)
+  const x = d3
+    .scaleBand()
+    .domain(relevantYears)
+    .range([0, width])
+    .padding(0.05);
 
-  // Шкала Y (Страны)
+  // scale Y (Countries)
   const y = d3.scaleBand().domain(countries).range([height, 0]).padding(0.1);
 
-  // Ось X
+  // axis X
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
-    // Показываем каждый 3-й год, чтобы избежать наложения
+    // show every 3rd year label to avoid clutter
     .call(d3.axisBottom(x).tickValues(x.domain().filter((d, i) => !(i % 3))))
     .selectAll("text")
     .style("fill", COLORS.text);
 
-  // Ось Y
+  // axis Y
   svg
     .append("g")
     .call(d3.axisLeft(y))
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // Цветовая шкала
+  // color scale
   const maxGap = d3.max(longData, (d) => d.value);
   const color = d3
     .scaleSequential(COLORS.heatmap)
-    // Начинаем домен с -0.01, чтобы 0% были цветом 'min', а не смешанным
+    // start domain slightly below 0 to ensure very small values are visible
     .domain([-0.01, maxGap]);
 
-  // 3. Отрисовка ячеек
+  // draw cells
   svg
     .selectAll()
     .data(longData, (d) => `${d.country}:${d.year}`)
@@ -420,8 +477,8 @@ async function drawHeatmap(container, dataUrl, COLORS) {
 
 /**
  * ========================================================================
- * 4. 100% Stacked Barchart: Доля по годам
- * Файл: stacked100_conflict_share.csv
+ * 4. 100% Stacked Barchart: conflict vs stable share over years
+ * file: stacked100_conflict_share.csv
  * ========================================================================
  */
 async function drawStackedBarchart(container, dataUrl, COLORS) {
@@ -429,8 +486,8 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
 
   const keys = ["conflict_share", "stable_share"];
   const stackedData = d3.stack().keys(keys)(data);
-  // d[0] - нижняя граница, d[1] - верхняя
-  // d.data - исходный объект (с 'year')
+  // d[0] - lower bound, d[1] - upper bound
+  // d.data - source object (with ‘year’))
 
   const margin = { top: 60, right: 30, bottom: 90, left: 70 };
   const totalWidth = 500;
@@ -446,23 +503,19 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Шкала X (Годы)
   const x = d3
     .scaleBand()
     .domain(data.map((d) => d.year))
     .range([0, width])
     .padding(0.1);
 
-  // Шкала Y (Проценты)
   const y = d3.scaleLinear().domain([0, 100]).range([height, 0]);
 
-  // Цветовая шкала
   const color = d3
     .scaleOrdinal()
     .domain(keys)
     .range([COLORS.conflict, COLORS.stable]);
 
-  // Ось X
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
@@ -472,7 +525,6 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
     .style("text-anchor", "end")
     .style("fill", COLORS.text);
 
-  // Ось Y
   svg
     .append("g")
     .call(
@@ -483,8 +535,7 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
     )
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
-    
-  // Подпись оси Y
+
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
@@ -496,7 +547,7 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
     .style("font-size", "12px")
     .text("Share of Contexts");
 
-  // Слои
+  // layers
   svg
     .append("g")
     .selectAll("g")
@@ -505,7 +556,7 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
     .append("g")
     .attr("fill", (d) => color(d.key))
     .selectAll("rect")
-    .data((d) => d) // d - это [y0, y1] + data
+    .data((d) => d) // d - is [y0, y1] + data
     .enter()
     .append("rect")
     .attr("x", (d) => x(d.data.year))
@@ -514,12 +565,11 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
     .attr("width", x.bandwidth())
     .append("title")
     .text((d) => {
-      const key = (d[1] === d.data.stable_share) ? "Stable" : "Conflict";
+      const key = d[1] === d.data.stable_share ? "Stable" : "Conflict";
       const pct = (d[1] - d[0]).toFixed(1);
       return `${d.data.year} (${key}): ${pct}%`;
     });
 
-  // Легенда
   const legend = svg
     .append("g")
     .attr("transform", `translate(${width - 100}, -45)`);
@@ -547,7 +597,7 @@ async function drawStackedBarchart(container, dataUrl, COLORS) {
 
 /**
  * ========================================================================
- * 5. Waffle Chart: Глобальные средние
+ * 5. Waffle Chart: global Average Comparison
  * Файл: waffle_global_avg.csv
  * ========================================================================
  */
@@ -569,23 +619,23 @@ async function drawWaffleChart(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Настройки "вафли"
-  const waffleSize = 10; // 10x10 сетка
+  // setting up waffle parameters
+  const waffleSize = 10;
   const totalSquares = waffleSize * waffleSize;
   const squareSize = 12;
   const squareGap = 3;
   const waffleWidth = (squareSize + squareGap) * waffleSize - squareGap;
   const waffleHeight = waffleWidth;
-  
-  // Расстояние между двумя вафлями
+
+  //spacing between two waffles
   const waffleSpacing = 40;
 
-  // Общая ширина двух вафель
+  // Total width of two wafers
   const totalWafflesWidth = waffleWidth * 2 + waffleSpacing;
-  
-  // Центрируем группу вафель
+
+  // Center the group of waffles
   const startX = (width - totalWafflesWidth) / 2;
-  const startY = (height - waffleHeight) / 2; // Центрируем по высоте
+  const startY = (height - waffleHeight) / 2;
 
   const waffleGroups = svg
     .selectAll(".waffle-group")
@@ -594,7 +644,6 @@ async function drawWaffleChart(container, dataUrl, COLORS) {
     .append("g")
     .attr("class", "waffle-group")
     .attr("transform", (d, i) => {
-      // Размещаем две вафли рядом
       const x = startX + i * (waffleWidth + waffleSpacing);
       return `translate(${x}, ${startY})`;
     });
@@ -602,40 +651,38 @@ async function drawWaffleChart(container, dataUrl, COLORS) {
   waffleGroups.each(function (d) {
     const group = d3.select(this);
     const numFilled = Math.round(d.avg_out_of_school_pct); // 11.9 -> 12, 6.49 -> 6
-    
-    // Создаем данные для 100 квадратов
+
+    // Creating data for 100 squares
     const waffleData = d3.range(totalSquares).map((i) => {
       return {
         isFilled: i < numFilled,
       };
     });
-    
+
     const isConflict = d.conflict_status === "Conflict";
     const fillColor = isConflict ? COLORS.conflict : COLORS.stable;
 
-    // Название (Conflict / Stable)
+    // name (Conflict / Stable)
     group
       .append("text")
       .attr("x", waffleWidth / 2)
-      .attr("y", -20) // Над вафлей
+      .attr("y", -20)
       .attr("text-anchor", "middle")
       .style("font-size", "14px")
       .style("font-weight", "600")
       .style("fill", COLORS.text)
       .text(d.conflict_status);
-      
-    // Процент
+
+    // %
     group
       .append("text")
       .attr("x", waffleWidth / 2)
       .attr("y", -5)
       .attr("text-anchor", "middle")
       .style("font-size", "12px")
-      .style("fill", fillColor) // Окрашиваем процент
+      .style("fill", fillColor)
       .text(`${d.avg_out_of_school_pct.toFixed(1)}%`);
 
-
-    // Квадраты
     group
       .selectAll(".square")
       .data(waffleData)
@@ -657,43 +704,40 @@ async function drawWaffleChart(container, dataUrl, COLORS) {
   });
 }
 
-
 /**
  * ========================================================================
- * 6. Histogram: Сравнение распределений
- * Файл: histogram.csv
- *
- * Примечание: Данные уже сгруппированы, поэтому мы используем
- * сгруппированный барный график для отображения гистограммы.
+ * 6. Histogram: Comparison of distributions
+ * file: histogram.csv
  * ========================================================================
  */
 async function drawHistogram(container, dataUrl, COLORS) {
   const data = await d3.csv(dataUrl, d3.autoType);
 
-  // 1. Данные уже сгруппированы. Нам нужно преобразовать их.
+  // The data is already grouped; it needs to be converted
   const dataByBin = d3.group(data, (d) => d.bin_mid);
 
   const groupedData = Array.from(dataByBin.entries())
     .map(([bin, values]) => {
-      // Создаем читаемую метку бина
+      // Creating a readable binary label
       const binStart = values[0].bin_start;
       const binEnd = values[0].bin_end;
       const binLabel = `${binStart.toFixed(0)}–${binEnd.toFixed(0)}%`;
 
       return {
         bin: binLabel,
-        bin_start: binStart, // Для сортировки
+        bin_start: binStart, // for sorting
         Conflict:
           values.find((d) => d.conflict_status === "Conflict")?.count || 0,
-        Stable:
-          values.find((d) => d.conflict_status === "Stable")?.count || 0,
+        Stable: values.find((d) => d.conflict_status === "Stable")?.count || 0,
       };
     })
-    // Сортируем по началу бина, а не по алфавиту
+    // Sort by the beginning of the bin, not alphabetically
     .sort((a, b) => a.bin_start - b.bin_start);
-    
-  // 2. Отфильтровываем бины, где оба значения 0, для ясности
-  const filteredData = groupedData.filter(d => d.Conflict > 0 || d.Stable > 0);
+
+  // filter out bins where both values are 0, for clarity
+  const filteredData = groupedData.filter(
+    (d) => d.Conflict > 0 || d.Stable > 0
+  );
 
   const keys = ["Conflict", "Stable"];
 
@@ -711,24 +755,23 @@ async function drawHistogram(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Шкала X0 (для бинов)
+  // X0 scale (for bins)
   const x0 = d3
     .scaleBand()
     .domain(filteredData.map((d) => d.bin))
     .rangeRound([0, width])
     .paddingInner(0.1);
 
-  // Шкала X1 (для 'Conflict' и 'Stable' внутри бина)
+  // Scale X1 (for ‘Conflict’ and ‘Stable’ inside the bin)
   const x1 = d3
     .scaleBand()
     .domain(keys)
     .rangeRound([0, x0.bandwidth()])
     .padding(0.05);
 
-  // Шкала Y
   const y = d3
     .scaleLinear()
-    // Используем логарифмическую шкалу, так как 'Stable' имеет очень высокие пики
+    // use a logarithmic scale because ‘Stable’ has very high peaks
     .domain([0.1, d3.max(filteredData, (d) => Math.max(d.Conflict, d.Stable))])
     .nice()
     .rangeRound([height, 0]);
@@ -738,7 +781,6 @@ async function drawHistogram(container, dataUrl, COLORS) {
     .domain(keys)
     .range([COLORS.conflict, COLORS.stable]);
 
-  // Ось X
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
@@ -748,18 +790,14 @@ async function drawHistogram(container, dataUrl, COLORS) {
     .style("text-anchor", "end")
     .style("fill", COLORS.text);
 
-  // Ось Y
   svg
     .append("g")
     .call(
-      d3
-        .axisLeft(y)
-        .ticks(5, ".1s") // Формат для лог. шкалы
+      d3.axisLeft(y).ticks(5, ".1s") // format for log scale
     )
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // Подпись оси Y
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
@@ -771,7 +809,6 @@ async function drawHistogram(container, dataUrl, COLORS) {
     .style("font-size", "12px")
     .text("Frequency (Log Scale)");
 
-  // Группы столбцов
   const groups = svg
     .selectAll(".group")
     .data(filteredData)
@@ -780,23 +817,21 @@ async function drawHistogram(container, dataUrl, COLORS) {
     .attr("class", "group")
     .attr("transform", (d) => `translate(${x0(d.bin)},0)`);
 
-  // Столбцы
   groups
     .selectAll("rect")
     .data((d) => keys.map((key) => ({ key, value: d[key], bin: d.bin })))
     .enter()
     .append("rect")
     .attr("x", (d) => x1(d.key))
-    // Используем y(Math.max(0.1, d.value)) для лог. шкалы, чтобы 0 не ломал график
+    // use y(Math.max(0.1, d.value)) for the log scale so that 0 does not break the graph
     .attr("y", (d) => y(Math.max(0.1, d.value)))
     .attr("width", x1.bandwidth())
     .attr("height", (d) => height - y(Math.max(0.1, d.value)))
     .attr("fill", (d) => color(d.key))
-    .style("opacity", 0.8) // Добавляем прозрачность для наложения
+    .style("opacity", 0.8) // Add transparency for overlay
     .append("title")
     .text((d) => `Bin ${d.bin} (${d.key}): ${d.value.toFixed(0)}`);
-  
-  // Легенда (как в GroupedBarchart)
+
   const legend = svg
     .append("g")
     .attr("transform", `translate(${width - 100}, -35)`);
@@ -823,8 +858,8 @@ async function drawHistogram(container, dataUrl, COLORS) {
 
 /**
  * ========================================================================
- * 7. Violin Plot: Полное распределение
- * Файл: violin_box_raw.csv
+ * 7. Violin Plot: for distribution comparison
+ * file: violin_box_raw.csv
  * ========================================================================
  */
 async function drawViolinPlot(container, dataUrl, COLORS) {
@@ -844,26 +879,31 @@ async function drawViolinPlot(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Шкала Y (Числовая)
+  //  Y scale (Numerical)
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(data, (d) => d.out_of_school_pct)])
     .nice()
     .range([height, 0]);
-  
+
   svg
     .append("g")
-    .call(d3.axisLeft(y).ticks(5).tickFormat((d) => `${d.toFixed(0)}%`))
+    .call(
+      d3
+        .axisLeft(y)
+        .ticks(5)
+        .tickFormat((d) => `${d.toFixed(0)}%`)
+    )
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // Шкала X (Категориальная)
+  // X scale (Categorical)
   const x = d3
     .scaleBand()
     .domain(["Conflict", "Stable"])
     .range([0, width])
-    .padding(0.2); // Отступ между скрипками
-  
+    .padding(0.2);
+
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
@@ -871,59 +911,56 @@ async function drawViolinPlot(container, dataUrl, COLORS) {
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // --- Создание "скрипок" ---
-  // 1. Создаем "bins" (гистограмму) для каждого статуса
+  // --- Making “violins” ---
+  // Create bins (histogram) for each status
   const histogram = d3
     .histogram()
     .domain(y.domain())
-    .thresholds(y.ticks(20)) // 20 бинов для гладкости
+    .thresholds(y.ticks(20)) // 20 bins for smoothness
     .value((d) => d.out_of_school_pct);
 
-  const conflictBins = histogram(data.filter((d) => d.conflict_status === "Conflict"));
-  const stableBins = histogram(data.filter((d) => d.conflict_status === "Stable"));
+  const conflictBins = histogram(
+    data.filter((d) => d.conflict_status === "Conflict")
+  );
+  const stableBins = histogram(
+    data.filter((d) => d.conflict_status === "Stable")
+  );
 
-  // 2. Находим максимальную "длину" (кол-во) в бине
+  // Find the maximum “length” (number) in the bin
   const maxBinLength = Math.max(
     d3.max(conflictBins, (d) => d.length),
     d3.max(stableBins, (d) => d.length)
   );
 
-  // 3. Шкала для "ширины" скрипки
+  // Scale for the “width” of a violin
   const violinWidthScale = d3
     .scaleLinear()
     .domain([0, maxBinLength])
-    .range([0, x.bandwidth() / 2]); // Ширина от 0 до половины полосы
+    .range([0, x.bandwidth() / 2]); // Max width is half the band
 
-  // 4. Генератор "области"
+  // generate area path for the violin
   const area = d3
     .area()
-    .x0((d) => -violinWidthScale(d.length)) // Левая сторона
-    .x1((d) => violinWidthScale(d.length)) // Правая сторона
-    .y((d) => y((d.x0 + d.x1) / 2)) // Центр бина
-    .curve(d3.curveCatmullRom); // Сглаживание
+    .x0((d) => -violinWidthScale(d.length)) // left side
+    .x1((d) => violinWidthScale(d.length)) // right side
+    .y((d) => y((d.x0 + d.x1) / 2)) // centwer
+    .curve(d3.curveCatmullRom);
 
-  // 5. Отрисовка "Conflict"
+  // viz
   svg
     .append("path")
     .datum(conflictBins)
-    .attr(
-      "transform",
-      `translate(${x("Conflict") + x.bandwidth() / 2}, 0)` // Сдвиг в центр
-    )
+    .attr("transform", `translate(${x("Conflict") + x.bandwidth() / 2}, 0)`)
     .attr("d", area)
     .style("fill", COLORS.conflict)
     .style("opacity", 0.7)
     .append("title")
     .text("Conflict Distribution");
 
-  // 6. Отрисовка "Stable"
   svg
     .append("path")
     .datum(stableBins)
-    .attr(
-      "transform",
-      `translate(${x("Stable") + x.bandwidth() / 2}, 0)` // Сдвиг в центр
-    )
+    .attr("transform", `translate(${x("Stable") + x.bandwidth() / 2}, 0)`)
     .attr("d", area)
     .style("fill", COLORS.stable)
     .style("opacity", 0.7)
@@ -933,26 +970,24 @@ async function drawViolinPlot(container, dataUrl, COLORS) {
 
 /**
  * ========================================================================
- * 8. Boxplot (Ящик с усами)
- * Файл: box_summary.csv
- *
- * Примечание: Мы используем пред-агрегированные данные.
+ * 8. Boxplot
+ * file: box_summary.csv
  * ========================================================================
  */
 async function drawBoxplot(container, dataUrl, COLORS) {
   const data = await d3.csv(dataUrl, d3.autoType);
 
-  // 1. Преобразуем "длинные" данные в "широкие"
-  // Группируем по 'conflict_status'
-  const nested = d3.group(data, d => d.conflict_status);
-  
-  // Преобразуем в { status: "Conflict", stats: { median: 16.2, q1: 5.4, ... } }
+  // Converting “long” data into “wide” data
+  // group by 'conflict_status'
+  const nested = d3.group(data, (d) => d.conflict_status);
+
+  // Convert to { status: “Conflict”, stats: { median: 16.2, q1: 5.4, ... } }
   const summaryData = Array.from(nested.entries()).map(([status, values]) => {
-      const stats = {};
-      values.forEach(v => {
-          stats[v.level_1] = v.out_of_school_pct;
-      });
-      return { status, stats };
+    const stats = {};
+    values.forEach((v) => {
+      stats[v.level_1] = v.out_of_school_pct;
+    });
+    return { status, stats };
   });
 
   const margin = { top: 30, right: 30, bottom: 50, left: 50 };
@@ -969,26 +1004,29 @@ async function drawBoxplot(container, dataUrl, COLORS) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Шкала Y (Числовая)
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(summaryData, d => d.stats.whisker_high)])
+    .domain([0, d3.max(summaryData, (d) => d.stats.whisker_high)])
     .nice()
     .range([height, 0]);
-  
+
   svg
     .append("g")
-    .call(d3.axisLeft(y).ticks(5).tickFormat((d) => `${d.toFixed(0)}%`))
+    .call(
+      d3
+        .axisLeft(y)
+        .ticks(5)
+        .tickFormat((d) => `${d.toFixed(0)}%`)
+    )
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // Шкала X (Категориальная)
   const x = d3
     .scaleBand()
     .domain(["Conflict", "Stable"])
     .range([0, width])
-    .padding(0.4); // Широкий отступ для "ящиков"
-  
+    .padding(0.4);
+
   svg
     .append("g")
     .attr("transform", `translate(0,${height})`)
@@ -996,15 +1034,14 @@ async function drawBoxplot(container, dataUrl, COLORS) {
     .call((g) => g.selectAll(".domain, .tick line").style("stroke", "#555"))
     .call((g) => g.selectAll("text").style("fill", COLORS.text));
 
-  // --- Отрисовка ящиков ---
+  // --- viz ---
   const boxWidth = x.bandwidth();
 
-  summaryData.forEach(d => {
+  summaryData.forEach((d) => {
     const { status, stats } = d;
     const center = x(status) + boxWidth / 2;
-    const color = (status === "Conflict") ? COLORS.conflict : COLORS.stable;
+    const color = status === "Conflict" ? COLORS.conflict : COLORS.stable;
 
-    // Вертикальная линия (усы)
     svg
       .append("line")
       .attr("x1", center)
@@ -1014,7 +1051,6 @@ async function drawBoxplot(container, dataUrl, COLORS) {
       .attr("stroke", color)
       .attr("stroke-width", 2);
 
-    // Ящик (IQR)
     svg
       .append("rect")
       .attr("x", x(status))
@@ -1024,30 +1060,32 @@ async function drawBoxplot(container, dataUrl, COLORS) {
       .attr("fill", color)
       .style("opacity", 0.7)
       .append("title")
-      .text(`${status} (IQR: ${stats.q1.toFixed(1)}% - ${stats.q3.toFixed(1)}%)`);
+      .text(
+        `${status} (IQR: ${stats.q1.toFixed(1)}% - ${stats.q3.toFixed(1)}%)`
+      );
 
-    // Линия медианы
     svg
       .append("line")
       .attr("x1", x(status))
       .attr("x2", x(status) + boxWidth)
       .attr("y1", y(stats.median))
       .attr("y2", y(stats.median))
-      .attr("stroke", "#FFFFFF") // Белая линия для контраста
+      .attr("stroke", "#FFFFFF")
       .attr("stroke-width", 2)
       .append("title")
       .text(`${status} (Median: ${stats.median.toFixed(1)}%)`);
-      
-    // "Засечки" на усах
-    svg.append("line")
+
+    svg
+      .append("line")
       .attr("x1", center - boxWidth / 4)
       .attr("x2", center + boxWidth / 4)
       .attr("y1", y(stats.whisker_low))
       .attr("y2", y(stats.whisker_low))
       .attr("stroke", color)
       .attr("stroke-width", 2);
-      
-    svg.append("line")
+
+    svg
+      .append("line")
       .attr("x1", center - boxWidth / 4)
       .attr("x2", center + boxWidth / 4)
       .attr("y1", y(stats.whisker_high))
@@ -1055,4 +1093,532 @@ async function drawBoxplot(container, dataUrl, COLORS) {
       .attr("stroke", color)
       .attr("stroke-width", 2);
   });
+}
+
+/**
+ * ========================================================================
+ * 9: Ridgeline Plot (Joyplot)
+ * file: histogram_country_time.csv
+ * ========================================================================
+ */
+async function drawRidgelinePlot(container, dataUrl, COLORS) {
+  const rawData = await d3.csv(dataUrl, d3.autoType);
+
+  // We filter only Conflict (or you can make it Global) so that the graph is not overloaded.
+  const data = rawData.filter((d) => d.conflict_status === "Conflict");
+
+  // We obtain unique years and sort them (from new to old, so that the new ones overlap the old ones).
+  const years = [...new Set(data.map((d) => d.year))].sort(d3.descending);
+
+  // Receiving bins
+  const bins = [...new Set(data.map((d) => d.bin_mid))].sort(d3.ascending);
+
+  // Grouping data
+  const dataByYear = d3.group(data, (d) => d.year);
+
+  const margin = { top: 60, right: 30, bottom: 50, left: 60 };
+  const totalWidth = 500;
+  const totalHeight = 500;
+  const width = totalWidth - margin.left - margin.right;
+  const height = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3
+    .select(container)
+    .append("svg")
+    .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // X Scale (Bins/Percentages)
+  const x = d3
+    .scaleLinear()
+    .domain([0, 100])
+    .range([0, width]);
+
+  // Y-scale (Years) - use scaleBand to position the baselines
+  const y = d3.scaleBand().domain(years).range([0, height]).paddingInner(1);
+
+  // Mountain height scale (Count)
+  const maxCount = d3.max(data, (d) => d.count);
+  const z = d3.scaleLinear().domain([0, maxCount]).range([0, -60]); // Peak height (negative, since upward)
+
+  // Area generator
+  const area = d3
+    .area()
+    .x((d) => x(d.bin_mid))
+    .y0(0)
+    .y1((d) => z(d.count))
+    .curve(d3.curveBasis);
+
+  svg
+    .selectAll(".ridge")
+    .data(years)
+    .enter()
+    .append("g")
+    .attr("transform", (d) => `translate(0, ${y(d)})`)
+    .each(function (year) {
+      const group = d3.select(this);
+      const yearDataRaw = dataByYear.get(year) || [];
+
+      // Fill in the gaps with zeros for correct line rendering.
+      const yearData = bins.map((bin) => {
+        const found = yearDataRaw.find((r) => r.bin_mid === bin);
+        return { bin_mid: bin, count: found ? found.count : 0 };
+      });
+
+      group
+        .append("path")
+        .datum(yearData)
+        .attr("fill", COLORS.conflict) // The color of conflict
+        .attr("opacity", 0.6)
+        .attr("d", area);
+
+      group
+        .append("path")
+        .datum(yearData)
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr("stroke-width", 0.5)
+        .attr(
+          "d",
+          area.lineY1((d) => z(d.count))
+        );
+
+      group
+        .append("text")
+        .attr("x", -10)
+        .attr("y", 0)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "end")
+        .style("fill", COLORS.text)
+        .style("font-size", "12px")
+        .text(year);
+    });
+
+  // axis X
+  svg
+    .append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(
+      d3
+        .axisBottom(x)
+        .ticks(5)
+        .tickFormat((d) => `${d}%`)
+    )
+    .selectAll("text")
+    .style("fill", COLORS.text);
+
+  // title X
+  svg
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", height + 35)
+    .style("text-anchor", "middle")
+    .style("fill", COLORS.text)
+    .style("font-size", "12px")
+    .text("Out-of-School Rate (%)");
+}
+
+/**
+ * ========================================================================
+ * 10: Streamgraph
+ * file: violin_box_raw.csv
+ * ========================================================================
+ */
+async function drawStreamgraph(container, dataUrl, COLORS) {
+  const rawData = await d3.csv(dataUrl, d3.autoType);
+
+  // 1. Aggregation: Sum (or average) of percentages by year and status
+  const dataByYear = d3.rollup(
+    rawData,
+    (v) => d3.mean(v, (d) => d.out_of_school_pct),
+    (d) => d.year,
+    (d) => d.conflict_status
+  );
+
+  const years = [...new Set(rawData.map((d) => d.year))].sort(d3.ascending);
+  const keys = ["Conflict", "Stable"];
+
+  // Preparing data for the stack
+  const stackData = years.map((year) => {
+    const obj = { year: year };
+    keys.forEach((key) => {
+      obj[key] = dataByYear.get(year)?.get(key) || 0;
+    });
+    return obj;
+  });
+
+  const margin = { top: 20, right: 30, bottom: 40, left: 30 };
+  const totalWidth = 500;
+  const totalHeight = 400;
+  const width = totalWidth - margin.left - margin.right;
+  const height = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3
+    .select(container)
+    .append("svg")
+    .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // Stack with offset “Silhouette” (centered stream) or “Wiggle”
+  const stack = d3
+    .stack()
+    .keys(keys)
+    .offset(d3.stackOffsetSilhouette) // Centers the graph
+    .order(d3.stackOrderNone);
+
+  const series = stack(stackData);
+
+  // scales
+  const x = d3.scaleLinear().domain(d3.extent(years)).range([0, width]);
+
+  // The Y domain depends on the offset. Find the min and max in the series
+  const yMin = d3.min(series, (layer) => d3.min(layer, (d) => d[0]));
+  const yMax = d3.max(series, (layer) => d3.max(layer, (d) => d[1]));
+
+  const y = d3.scaleLinear().domain([yMin, yMax]).range([height, 0]);
+
+  const color = d3
+    .scaleOrdinal()
+    .domain(keys)
+    .range([COLORS.conflict, COLORS.stable]);
+
+  const area = d3
+    .area()
+    .x((d) => x(d.data.year))
+    .y0((d) => y(d[0]))
+    .y1((d) => y(d[1]))
+    .curve(d3.curveCatmullRom);
+
+  svg
+    .selectAll("path")
+    .data(series)
+    .enter()
+    .append("path")
+    .attr("d", area)
+    .attr("fill", (d) => color(d.key))
+    .attr("opacity", 0.8)
+    .append("title")
+    .text((d) => d.key);
+
+  // axis X
+  svg
+    .append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x).tickFormat(d3.format("d")).tickSize(0))
+    .select(".domain")
+    .remove(); 
+
+  svg.selectAll(".tick text").style("fill", COLORS.text);
+
+  // legend
+  svg
+    .selectAll(".label")
+    .data(keys)
+    .enter()
+    .append("text")
+    .attr("x", 10)
+    .attr("y", (d, i) => 30 + i * 20)
+    .style("fill", (d) => color(d))
+    .style("font-weight", "bold")
+    .text((d) => d);
+}
+
+/**
+ * ========================================================================
+ * 11: Horizon-style Multiples
+ * file: violin_box_raw.csv
+ * ========================================================================
+ */
+async function drawHorizonMultiples(container, dataUrl, COLORS) {
+  const rawData = await d3.csv(dataUrl, d3.autoType);
+
+  // Grouping by country
+  const dataByCountry = d3.group(rawData, (d) => d.country);
+  const countries = Array.from(dataByCountry.keys()).sort();
+  const years = [...new Set(rawData.map((d) => d.year))].sort(d3.ascending);
+
+  // setting up dimensions
+  const margin = { top: 30, right: 20, bottom: 20, left: 60 }; 
+  const totalWidth = 500;
+  const rowHeight = 28; 
+  const gap = 5;
+  const totalHeight =
+    countries.length * (rowHeight + gap) + margin.top + margin.bottom;
+  const width = totalWidth - margin.left - margin.right;
+
+  const svg = d3
+    .select(container)
+    .append("svg")
+    // Dynamic height depending on the number of countries
+    .attr("viewBox", `0 0 ${totalWidth} ${Math.max(400, totalHeight)}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // General X scale
+  const x = d3.scaleLinear().domain(d3.extent(years)).range([0, width]);
+
+  // Total Y scale (local for each row)
+  // Find the global maximum for unification, or the local maximum for detailing
+  // For Horizon, it is better to use a global or fixed max to compare scales.
+  const globalMax = 50; // We trim emissions > 50% for readability of key data
+  const y = d3.scaleLinear().domain([0, globalMax]).range([rowHeight, 0]);
+
+  const area = d3
+    .area()
+    .x((d) => x(d.year))
+    .y0(rowHeight)
+    .y1((d) => y(Math.min(d.out_of_school_pct, globalMax))) // Clip at max
+    .curve(d3.curveMonotoneX);
+
+  const rows = svg
+    .selectAll(".row")
+    .data(countries)
+    .enter()
+    .append("g")
+    .attr("transform", (d, i) => `translate(0, ${i * (rowHeight + gap)})`);
+
+  rows.each(function (country) {
+    const group = d3.select(this);
+    const countryData = dataByCountry
+      .get(country)
+      .sort((a, b) => a.year - b.year);
+
+    // Determine status (for color) - take the status of the last year or the prevailing status
+    const isConflict = countryData.some(
+      (d) => d.conflict_status === "Conflict"
+    );
+    const fillColor = isConflict ? COLORS.conflict : COLORS.stable;
+
+    group
+      .append("rect")
+      .attr("width", width)
+      .attr("height", rowHeight)
+      .attr("fill", "#ffffff")
+      .attr("opacity", 0.05);
+
+    // Data area
+    group
+      .append("path")
+      .datum(countryData)
+      .attr("fill", fillColor)
+      .attr("opacity", 0.7)
+      .attr("d", area);
+
+    // Data line (for clarity)
+    group
+      .append("path")
+      .datum(countryData)
+      .attr("fill", "none")
+      .attr("stroke", fillColor)
+      .attr("stroke-width", 1)
+      .attr(
+        "d",
+        area.lineY1((d) => y(Math.min(d.out_of_school_pct, globalMax)))
+      );
+
+    group
+      .append("text")
+      .attr("x", -10)
+      .attr("y", rowHeight / 2)
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "end")
+      .style("fill", COLORS.text)
+      .style("font-size", "10px")
+      .text(country);
+  });
+
+  const axisYPos = countries.length * (rowHeight + gap);
+  svg
+    .append("g")
+    .attr("transform", `translate(0, ${axisYPos})`)
+    .call(d3.axisBottom(x).tickFormat(d3.format("d")).ticks(5))
+    .selectAll("text")
+    .style("fill", COLORS.text);
+
+  svg.select(".domain").attr("stroke", "#555");
+}
+
+/**
+ * ========================================================================
+ * 12: Bump Chart
+ * file: box_summary_country_time.csv
+ * ========================================================================
+ */
+async function drawBumpChart(container, dataUrl, COLORS) {
+    const rawData = await d3.csv(dataUrl, d3.autoType);
+    
+    const years = [...new Set(rawData.map(d => d.year))].sort(d3.ascending);
+    
+    // Group by year and rank
+    const rankedData = years.flatMap(year => {
+        const yearData = rawData.filter(d => d.year === year);
+        // Sort by median (high % = rank 1)
+        yearData.sort((a, b) => d3.descending(a.median, b.median));
+        return yearData.map((d, i) => ({
+            year: d.year,
+            country: d.country,
+            median: d.median,
+            rank: i + 1, 
+            status: d.conflict_status
+        }));
+    });
+
+    const dataByCountry = d3.group(rankedData, d => d.country);
+    const countries = Array.from(dataByCountry.keys());
+    
+    
+    const margin = { top: 30, right: 80, bottom: 40, left: 60 };
+    const totalWidth = 550;
+    const totalHeight = 550;
+    const width = totalWidth - margin.left - margin.right;
+    const height = totalHeight - margin.top - margin.bottom;
+
+    const svg = d3.select(container)
+        .append("svg")
+        .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // scales
+    const maxRank = d3.max(rankedData, d => d.rank);
+    
+    const x = d3.scalePoint()
+        .domain(years)
+        .range([0, width]); // The graph is drawn strictly to width
+
+    const y = d3.scaleLinear()
+        .domain([1, maxRank])
+        .range([0, height]);
+
+    const countryColor = d3.scaleOrdinal(d3.schemeCategory10).domain(countries);
+
+    const line = d3.line()
+        .x(d => x(d.year))
+        .y(d => y(d.rank))
+        .curve(d3.curveMonotoneX);
+
+    // draw lines
+    svg.selectAll(".rank-line")
+        .data(dataByCountry)
+        .enter()
+        .append("path")
+        .attr("class", "rank-line")
+        .attr("fill", "none")
+        .attr("stroke-width", 3)
+        .attr("stroke", d => countryColor(d[0]))
+        .attr("d", d => line(d[1]))
+        .attr("opacity", 0.8)
+        .style("mix-blend-mode", "screen");
+
+    // draw dots
+    svg.selectAll(".rank-dot")
+        .data(rankedData)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d.year))
+        .attr("cy", d => y(d.rank))
+        .attr("r", 3)
+        .attr("fill", d => countryColor(d.country))
+        .attr("stroke", "#2b2b2b")
+        .attr("stroke-width", 1);
+
+    // --- CALCULATION OF SIGNATURE POSITIONS ---
+
+    const labelsData = countries.map(c => {
+        const points = dataByCountry.get(c);
+        // We take the latest available point
+        const lastPoint = points.sort((a, b) => a.year - b.year)[points.length - 1];
+        return {
+            country: c,
+            // Coordinates of the end of the graph line
+            xAnchor: x(lastPoint.year), 
+            yAnchor: y(lastPoint.rank),
+            yText: y(lastPoint.rank),
+            rank: lastPoint.rank
+        };
+    });
+
+    // Sort signatures vertically 
+    labelsData.sort((a, b) => a.yAnchor - b.yAnchor);
+
+    // “Separate” the signatures so they don't stick together
+    const fontSize = 12; // Размер шрифта + отступ
+    
+    for (let i = 1; i < labelsData.length; i++) {
+        const prev = labelsData[i - 1];
+        const curr = labelsData[i];
+        
+        // If the current mark is higher than (previous + font height), shift
+        if (curr.yText < prev.yText + fontSize) {
+            curr.yText = prev.yText + fontSize;
+        }
+    }
+
+    const labelGroup = svg.selectAll(".label-group")
+        .data(labelsData)
+        .enter()
+        .append("g");
+
+    // Connecting line (from the graph point to the text)
+    labelGroup.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "#888")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "2,2") 
+        .attr("opacity", 0.5)
+        .attr("d", d => {
+            return `M ${d.xAnchor + 5}, ${d.yAnchor} 
+                    C ${width + 20}, ${d.yAnchor} 
+                      ${width - 20}, ${d.yText} 
+                      ${width + 10}, ${d.yText}`;
+        });
+
+    labelGroup.append("text")
+        .attr("x", width + 15) 
+        .attr("y", d => d.yText)
+        .attr("dy", "0.35em") 
+        .style("fill", d => countryColor(d.country))
+        .style("font-size", "11px")
+        .style("font-weight", "bold")
+        .text(d => d.country);
+        
+    // axis
+    svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll("text").style("fill", COLORS.text);
+
+    svg.selectAll(".grid-line")
+        .data(years)
+        .enter()
+        .append("line")
+        .attr("x1", d => x(d))
+        .attr("x2", d => x(d))
+        .attr("y1", 0)
+        .attr("y2", height)
+        .attr("stroke", "#444")
+        .attr("stroke-dasharray", "2,2")
+        .attr("opacity", 0.3)
+        .lower();
+
+    // axis Y
+    svg.append("g")
+        .call(d3.axisLeft(y).ticks(maxRank))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").remove())
+        .call(g => g.selectAll("text").style("fill", "#666"));
+        
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left + 15)
+        .attr("x", 0 - height / 2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("fill", COLORS.text)
+        .text("Rank (1 = Highest Rate)");
 }
