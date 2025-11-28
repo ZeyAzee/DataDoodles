@@ -300,6 +300,54 @@
         </div>
       </section>
 
+      <section class="title-section">
+        <div class="container">
+          <h2>Mapping the Geography of Lost Schooling</h2>
+          <p class="sub">Spatial patterns and long-term shifts in access to primary education</p>
+        </div>
+      </section>
+
+      <div class="notice-banner">
+        <div class="container">
+          <p>
+            The choropleth and change maps reveal where educational exclusion is concentrated and how 
+            it has evolved from 2010 to 2024, highlighting persistent high-risk regions and trajectories 
+            of improvement or decline.
+          </p>
+        </div>
+      </div>
+
+      <section class="gallery">
+        <div class="container">
+          <div class="cards">
+            <a href="#" class="viz-card" data-chart="Change Map" id="viz-change">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">
+                <h4>Change Map (2010 → 2024) — Evolution of Out-of-School Rates</h4>
+                <p>
+                  This map highlights the change in out-of-school percentages from 2010 to 2024 for each 
+                  country. Positive values indicate worsening access to education, while negative values 
+                  reflect improvement. The map reveals how conflict escalation or recovery has shaped long-term 
+                  educational outcomes.
+                </p>
+              </div>
+            </a>
+            <a href="#" class="viz-card" data-chart="Choropleth Map" id="viz-choropleth">
+              <div class="viz-canvas">chart</div>
+              <div class="viz-footer">
+                <h4>Choropleth Map — Education Exclusion Intensity</h4>
+                <p>
+                  This choropleth map shows the average percentage of primary-school-age children out 
+                  of school in each country between 2010 and 2024. Darker shades indicate more severe 
+                  or persistent educational disruption. Conflict-affected countries consistently show 
+                  higher exclusion levels compared to stable nations.
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <footer class="site-footer">
         <div class="container">
           <div class="footer-grid">
@@ -346,6 +394,8 @@
     </main>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <script src="js/visualisations.js"></script>
   </body>
 </html>

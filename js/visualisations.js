@@ -115,6 +115,30 @@ document.addEventListener("DOMContentLoaded", () => {
             COLORS
           );
           break;
+        case "Change Map":
+          drawChoroplethMapChange(
+            canvas,
+            "Data/ChildreEducationConflict/MapData/change_map.csv",
+            "Data/ChildreEducationConflict/MapData/custom.geo.json",
+            COLORS
+          );
+          break;
+        case "Choropleth Map":
+          drawChoroplethMapAvg(
+            canvas,
+            "Data/ChildreEducationConflict/MapData/choropleth.csv",
+            "Data/ChildreEducationConflict/MapData/custom.geo.json",
+            COLORS
+          );
+          break;
+        case "Proportional Symbol Map":
+          drawProportionalSymbolMap(
+            canvas,
+            "Data/ChildreEducationConflict/MapData/proportional_symbols.csv",
+            "Data/ChildreEducationConflict/MapData/custom.geo.json",
+            COLORS
+          );
+          break;
       }
     } catch (error) {
       console.error("Error drawing chart:", chartType, error);
@@ -1131,10 +1155,7 @@ async function drawRidgelinePlot(container, dataUrl, COLORS) {
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
   // X Scale (Bins/Percentages)
-  const x = d3
-    .scaleLinear()
-    .domain([0, 100])
-    .range([0, width]);
+  const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
 
   // Y-scale (Years) - use scaleBand to position the baselines
   const y = d3.scaleBand().domain(years).range([0, height]).paddingInner(1);
@@ -1309,7 +1330,7 @@ async function drawStreamgraph(container, dataUrl, COLORS) {
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(x).tickFormat(d3.format("d")).tickSize(0))
     .select(".domain")
-    .remove(); 
+    .remove();
 
   svg.selectAll(".tick text").style("fill", COLORS.text);
 
@@ -1341,9 +1362,9 @@ async function drawHorizonMultiples(container, dataUrl, COLORS) {
   const years = [...new Set(rawData.map((d) => d.year))].sort(d3.ascending);
 
   // setting up dimensions
-  const margin = { top: 30, right: 20, bottom: 20, left: 60 }; 
+  const margin = { top: 30, right: 20, bottom: 20, left: 60 };
   const totalWidth = 500;
-  const rowHeight = 28; 
+  const rowHeight = 28;
   const gap = 5;
   const totalHeight =
     countries.length * (rowHeight + gap) + margin.top + margin.bottom;
@@ -1449,176 +1470,540 @@ async function drawHorizonMultiples(container, dataUrl, COLORS) {
  * ========================================================================
  */
 async function drawBumpChart(container, dataUrl, COLORS) {
-    const rawData = await d3.csv(dataUrl, d3.autoType);
-    
-    const years = [...new Set(rawData.map(d => d.year))].sort(d3.ascending);
-    
-    // Group by year and rank
-    const rankedData = years.flatMap(year => {
-        const yearData = rawData.filter(d => d.year === year);
-        // Sort by median (high % = rank 1)
-        yearData.sort((a, b) => d3.descending(a.median, b.median));
-        return yearData.map((d, i) => ({
-            year: d.year,
-            country: d.country,
-            median: d.median,
-            rank: i + 1, 
-            status: d.conflict_status
-        }));
-    });
+  const rawData = await d3.csv(dataUrl, d3.autoType);
 
-    const dataByCountry = d3.group(rankedData, d => d.country);
-    const countries = Array.from(dataByCountry.keys());
-    
-    
-    const margin = { top: 30, right: 80, bottom: 40, left: 60 };
-    const totalWidth = 550;
-    const totalHeight = 550;
-    const width = totalWidth - margin.left - margin.right;
-    const height = totalHeight - margin.top - margin.bottom;
+  const years = [...new Set(rawData.map((d) => d.year))].sort(d3.ascending);
 
-    const svg = d3.select(container)
-        .append("svg")
-        .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`)
-        .attr("preserveAspectRatio", "xMidYMid meet")
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+  // Group by year and rank
+  const rankedData = years.flatMap((year) => {
+    const yearData = rawData.filter((d) => d.year === year);
+    // Sort by median (high % = rank 1)
+    yearData.sort((a, b) => d3.descending(a.median, b.median));
+    return yearData.map((d, i) => ({
+      year: d.year,
+      country: d.country,
+      median: d.median,
+      rank: i + 1,
+      status: d.conflict_status,
+    }));
+  });
 
-    // scales
-    const maxRank = d3.max(rankedData, d => d.rank);
-    
-    const x = d3.scalePoint()
-        .domain(years)
-        .range([0, width]); // The graph is drawn strictly to width
+  const dataByCountry = d3.group(rankedData, (d) => d.country);
+  const countries = Array.from(dataByCountry.keys());
 
-    const y = d3.scaleLinear()
-        .domain([1, maxRank])
-        .range([0, height]);
+  const margin = { top: 30, right: 80, bottom: 40, left: 60 };
+  const totalWidth = 550;
+  const totalHeight = 550;
+  const width = totalWidth - margin.left - margin.right;
+  const height = totalHeight - margin.top - margin.bottom;
 
-    const countryColor = d3.scaleOrdinal(d3.schemeCategory10).domain(countries);
+  const svg = d3
+    .select(container)
+    .append("svg")
+    .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const line = d3.line()
-        .x(d => x(d.year))
-        .y(d => y(d.rank))
-        .curve(d3.curveMonotoneX);
+  // scales
+  const maxRank = d3.max(rankedData, (d) => d.rank);
 
-    // draw lines
-    svg.selectAll(".rank-line")
-        .data(dataByCountry)
-        .enter()
-        .append("path")
-        .attr("class", "rank-line")
-        .attr("fill", "none")
-        .attr("stroke-width", 3)
-        .attr("stroke", d => countryColor(d[0]))
-        .attr("d", d => line(d[1]))
-        .attr("opacity", 0.8)
-        .style("mix-blend-mode", "screen");
+  const x = d3.scalePoint().domain(years).range([0, width]); // The graph is drawn strictly to width
 
-    // draw dots
-    svg.selectAll(".rank-dot")
-        .data(rankedData)
-        .enter()
-        .append("circle")
-        .attr("cx", d => x(d.year))
-        .attr("cy", d => y(d.rank))
-        .attr("r", 3)
-        .attr("fill", d => countryColor(d.country))
-        .attr("stroke", "#2b2b2b")
-        .attr("stroke-width", 1);
+  const y = d3.scaleLinear().domain([1, maxRank]).range([0, height]);
 
-    // --- CALCULATION OF SIGNATURE POSITIONS ---
+  const countryColor = d3.scaleOrdinal(d3.schemeCategory10).domain(countries);
 
-    const labelsData = countries.map(c => {
-        const points = dataByCountry.get(c);
-        // We take the latest available point
-        const lastPoint = points.sort((a, b) => a.year - b.year)[points.length - 1];
-        return {
-            country: c,
-            // Coordinates of the end of the graph line
-            xAnchor: x(lastPoint.year), 
-            yAnchor: y(lastPoint.rank),
-            yText: y(lastPoint.rank),
-            rank: lastPoint.rank
-        };
-    });
+  const line = d3
+    .line()
+    .x((d) => x(d.year))
+    .y((d) => y(d.rank))
+    .curve(d3.curveMonotoneX);
 
-    // Sort signatures vertically 
-    labelsData.sort((a, b) => a.yAnchor - b.yAnchor);
+  // draw lines
+  svg
+    .selectAll(".rank-line")
+    .data(dataByCountry)
+    .enter()
+    .append("path")
+    .attr("class", "rank-line")
+    .attr("fill", "none")
+    .attr("stroke-width", 3)
+    .attr("stroke", (d) => countryColor(d[0]))
+    .attr("d", (d) => line(d[1]))
+    .attr("opacity", 0.8)
+    .style("mix-blend-mode", "screen");
 
-    // “Separate” the signatures so they don't stick together
-    const fontSize = 12; // Размер шрифта + отступ
-    
-    for (let i = 1; i < labelsData.length; i++) {
-        const prev = labelsData[i - 1];
-        const curr = labelsData[i];
-        
-        // If the current mark is higher than (previous + font height), shift
-        if (curr.yText < prev.yText + fontSize) {
-            curr.yText = prev.yText + fontSize;
-        }
+  // draw dots
+  svg
+    .selectAll(".rank-dot")
+    .data(rankedData)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => x(d.year))
+    .attr("cy", (d) => y(d.rank))
+    .attr("r", 3)
+    .attr("fill", (d) => countryColor(d.country))
+    .attr("stroke", "#2b2b2b")
+    .attr("stroke-width", 1);
+
+  // --- CALCULATION OF SIGNATURE POSITIONS ---
+
+  const labelsData = countries.map((c) => {
+    const points = dataByCountry.get(c);
+    // We take the latest available point
+    const lastPoint = points.sort((a, b) => a.year - b.year)[points.length - 1];
+    return {
+      country: c,
+      // Coordinates of the end of the graph line
+      xAnchor: x(lastPoint.year),
+      yAnchor: y(lastPoint.rank),
+      yText: y(lastPoint.rank),
+      rank: lastPoint.rank,
+    };
+  });
+
+  // Sort signatures vertically
+  labelsData.sort((a, b) => a.yAnchor - b.yAnchor);
+
+  // “Separate” the signatures so they don't stick together
+  const fontSize = 12;
+
+  for (let i = 1; i < labelsData.length; i++) {
+    const prev = labelsData[i - 1];
+    const curr = labelsData[i];
+
+    // If the current mark is higher than (previous + font height), shift
+    if (curr.yText < prev.yText + fontSize) {
+      curr.yText = prev.yText + fontSize;
     }
+  }
 
-    const labelGroup = svg.selectAll(".label-group")
-        .data(labelsData)
-        .enter()
-        .append("g");
+  const labelGroup = svg
+    .selectAll(".label-group")
+    .data(labelsData)
+    .enter()
+    .append("g");
 
-    // Connecting line (from the graph point to the text)
-    labelGroup.append("path")
-        .attr("fill", "none")
-        .attr("stroke", "#888")
-        .attr("stroke-width", 1)
-        .attr("stroke-dasharray", "2,2") 
-        .attr("opacity", 0.5)
-        .attr("d", d => {
-            return `M ${d.xAnchor + 5}, ${d.yAnchor} 
+  // Connecting line (from the graph point to the text)
+  labelGroup
+    .append("path")
+    .attr("fill", "none")
+    .attr("stroke", "#888")
+    .attr("stroke-width", 1)
+    .attr("stroke-dasharray", "2,2")
+    .attr("opacity", 0.5)
+    .attr("d", (d) => {
+      return `M ${d.xAnchor + 5}, ${d.yAnchor} 
                     C ${width + 20}, ${d.yAnchor} 
                       ${width - 20}, ${d.yText} 
                       ${width + 10}, ${d.yText}`;
+    });
+
+  labelGroup
+    .append("text")
+    .attr("x", width + 15)
+    .attr("y", (d) => d.yText)
+    .attr("dy", "0.35em")
+    .style("fill", (d) => countryColor(d.country))
+    .style("font-size", "11px")
+    .style("font-weight", "bold")
+    .text((d) => d.country);
+
+  // axis
+  svg
+    .append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .style("fill", COLORS.text);
+
+  svg
+    .selectAll(".grid-line")
+    .data(years)
+    .enter()
+    .append("line")
+    .attr("x1", (d) => x(d))
+    .attr("x2", (d) => x(d))
+    .attr("y1", 0)
+    .attr("y2", height)
+    .attr("stroke", "#444")
+    .attr("stroke-dasharray", "2,2")
+    .attr("opacity", 0.3)
+    .lower();
+
+  // axis Y
+  svg
+    .append("g")
+    .call(d3.axisLeft(y).ticks(maxRank))
+    .call((g) => g.select(".domain").remove())
+    .call((g) => g.selectAll(".tick line").remove())
+    .call((g) => g.selectAll("text").style("fill", "#666"));
+
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left + 15)
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("fill", COLORS.text)
+    .text("Rank (1 = Highest Rate)");
+}
+
+/**
+ * ==================================================================
+ * КАРТА 1: Change Map (ФИНАЛЬНАЯ ПРОВЕРЕННАЯ ВЕРСИЯ)
+ * ==================================================================
+ */
+/**
+ * Change Map (2010 → 2024) — Evolution of Out-of-School Rates
+ * Ожидается, что CSV содержит:
+ * - один колонко-идентификатор страны (iso_a3/ISO_A3/iso3/…)
+ * - несколько числовых колонок с показателями по годам
+ * Код автоматически:
+ * - определяет колонку с кодом страны
+ * - выбирает самую раннюю и самую позднюю «годовую» колонку
+ * - рисует карту изменений (delta = latest - base)
+ */
+function drawChoroplethMapChange(containerEl, csvUrl, geoJsonUrl, COLORS) {
+  const width = containerEl.clientWidth || 600;
+  const height = Math.max(320, Math.round(width * 0.55));
+
+  containerEl.innerHTML = "";
+
+  const svg = d3
+    .select(containerEl)
+    .append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMidYMid meet");
+
+  const mapGroup = svg.append("g").attr("class", "map-group");
+
+  Promise.all([
+    d3.csv(csvUrl, d3.autoType),
+    d3.json(geoJsonUrl),
+  ])
+    .then(([rows, geo]) => {
+      const dataByCountry = new Map(rows.map((d) => [d.country, d]));
+
+      const changes = rows
+        .map((d) => d.change)
+        .filter((v) => typeof v === "number" && !Number.isNaN(v));
+
+      if (!changes.length) {
+        containerEl.textContent = "No data";
+        return;
+      }
+
+      const minChange = d3.min(changes);
+      const maxChange = d3.max(changes);
+
+      const color = d3
+        .scaleSequential()
+        .domain([minChange, maxChange])
+        .interpolator(COLORS.heatmap);
+
+      const projection = d3.geoNaturalEarth1().fitWidth(width, geo);
+      const path = d3.geoPath(projection);
+
+      const bounds = path.bounds(geo);
+      const geoHeight = bounds[1][1] - bounds[0][1];
+      const offsetY = (height - geoHeight) / 2 - bounds[0][1];
+
+      mapGroup.attr("transform", `translate(0,${offsetY})`);
+
+      mapGroup
+        .selectAll("path.country")
+        .data(geo.features)
+        .join("path")
+        .attr("class", "country")
+        .attr("d", path)
+        .attr("fill", (d) => {
+          const record = dataByCountry.get(d.properties.name);
+          if (!record || Number.isNaN(record.change)) {
+            return COLORS.waffleBg;
+          }
+          return color(record.change);
+        })
+        .attr("stroke", "#111")
+        .attr("stroke-width", 0.3);
+
+      const legendWidth = Math.min(220, width * 0.55);
+      const legendHeight = 10;
+      const legendMargin = 16;
+
+      const defs = svg.append("defs");
+      const gradientId = "change-map-gradient";
+
+      const gradient = defs
+        .append("linearGradient")
+        .attr("id", gradientId)
+        .attr("x1", "0%")
+        .attr("x2", "100%")
+        .attr("y1", "0%")
+        .attr("y2", "0%");
+
+      d3.range(0, 1.01, 0.1).forEach((t) => {
+        gradient
+          .append("stop")
+          .attr("offset", `${t * 100}%`)
+          .attr("stop-color", COLORS.heatmap(t));
+      });
+
+      const legendGroup = svg
+        .append("g")
+        .attr("class", "legend")
+        .attr(
+          "transform",
+          `translate(${width - legendWidth - legendMargin},${
+            height - legendMargin - 30
+          })`
+        );
+
+      legendGroup
+        .append("rect")
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .attr("fill", `url(#${gradientId})`);
+
+      const legendScale = d3
+        .scaleLinear()
+        .domain([minChange, maxChange])
+        .range([0, legendWidth]);
+
+      const legendAxis = d3
+        .axisBottom(legendScale)
+        .ticks(4)
+        .tickFormat(d3.format(".1f"));
+
+      legendGroup
+        .append("g")
+        .attr("transform", `translate(0,${legendHeight})`)
+        .call(legendAxis)
+        .call((g) => {
+          g.selectAll("text")
+            .attr("fill", COLORS.text)
+            .attr("font-size", 10);
+          g.selectAll("line,path").attr("stroke", COLORS.text);
         });
 
-    labelGroup.append("text")
-        .attr("x", width + 15) 
-        .attr("y", d => d.yText)
-        .attr("dy", "0.35em") 
-        .style("fill", d => countryColor(d.country))
-        .style("font-size", "11px")
-        .style("font-weight", "bold")
-        .text(d => d.country);
-        
-    // axis
-    svg.append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x))
-        .selectAll("text").style("fill", COLORS.text);
+      legendGroup
+        .append("text")
+        .attr("x", 0)
+        .attr("y", -4)
+        .attr("fill", COLORS.text)
+        .attr("font-size", 11)
+        .text("Change in out-of-school rate (p.p.)");
+    })
+    .catch((error) => {
+      console.error("Error drawing change map:", error);
+      containerEl.textContent = "Error loading map.";
+    });
+}
 
-    svg.selectAll(".grid-line")
-        .data(years)
-        .enter()
-        .append("line")
-        .attr("x1", d => x(d))
-        .attr("x2", d => x(d))
-        .attr("y1", 0)
-        .attr("y2", height)
-        .attr("stroke", "#444")
-        .attr("stroke-dasharray", "2,2")
-        .attr("opacity", 0.3)
-        .lower();
+/**
+ * ==================================================================
+ * КАРТА 2: Choropleth Map (Avg) (ФИНАЛЬНАЯ ПРОВЕРЕННАЯ ВЕРСИЯ)
+ * ==================================================================
+ */
+/**
+ * Change Map: разница в процентах детей вне школы между статусами
+ * "Conflict" и "Stable" для каждой страны (Conflict - Stable).
+ * CSV: country, conflict_status, avg_out_of_school_pct
+ */
+function drawChoroplethMapAvg(container, csvPath, geoPath, COLORS) {
+  // те же размеры, что и в drawChoroplethMapChange
+  const width = container.clientWidth || 600;
+  const height = Math.max(320, Math.round(width * 0.55));
 
-    // axis Y
-    svg.append("g")
-        .call(d3.axisLeft(y).ticks(maxRank))
-        .call(g => g.select(".domain").remove())
-        .call(g => g.selectAll(".tick line").remove())
-        .call(g => g.selectAll("text").style("fill", "#666"));
-        
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left + 15)
-        .attr("x", 0 - height / 2)
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .style("fill", COLORS.text)
-        .text("Rank (1 = Highest Rate)");
+  container.innerHTML = "";
+
+  const svg = d3
+    .select(container)
+    .append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMidYMid meet");
+
+  Promise.all([d3.json(geoPath), d3.csv(csvPath)])
+    .then(([geojson, rows]) => {
+      if (!geojson || !geojson.features || !rows || !rows.length) return;
+
+      const avgByCountry = d3.rollup(
+        rows,
+        (v) => d3.mean(v, (d) => +d.avg_out_of_school_pct),
+        (d) => d.country
+      );
+
+      const breakdownByCountry = d3.group(rows, (d) => d.country);
+
+      geojson.features.forEach((f) => {
+        const props = f.properties || {};
+        const name = props.admin;
+        const v = avgByCountry.get(name);
+        props._value = Number.isFinite(v) ? v : NaN;
+
+        const breakdown = breakdownByCountry.get(name);
+        if (breakdown) {
+          const conflictRow = breakdown.find(
+            (d) => d.conflict_status === "Conflict"
+          );
+          const stableRow = breakdown.find(
+            (d) => d.conflict_status === "Stable"
+          );
+          props._conflict = conflictRow
+            ? +conflictRow.avg_out_of_school_pct
+            : NaN;
+          props._stable = stableRow
+            ? +stableRow.avg_out_of_school_pct
+            : NaN;
+        } else {
+          props._conflict = NaN;
+          props._stable = NaN;
+        }
+      });
+
+      const values = geojson.features
+        .map((f) => f.properties._value)
+        .filter((v) => Number.isFinite(v));
+
+      if (!values.length) return;
+
+      const maxVal = d3.max(values);
+
+      // та же логика проекции и вертикального центрирования, что в Change Map
+      const projection = d3.geoNaturalEarth1().fitWidth(width, geojson);
+      const path = d3.geoPath(projection);
+
+      const bounds = path.bounds(geojson);
+      const geoHeight = bounds[1][1] - bounds[0][1];
+      const offsetY = (height - geoHeight) / 2 - bounds[0][1];
+
+      const g = svg.append("g").attr("transform", `translate(0,${offsetY})`);
+
+      const color = d3
+        .scaleSequential(COLORS.heatmap)
+        .domain([0, maxVal]);
+
+      const countries = g
+        .selectAll("path.country")
+        .data(geojson.features)
+        .join("path")
+        .attr("class", "country")
+        .attr("d", path)
+        .attr("fill", (d) => {
+          const v = d.properties._value;
+          return Number.isFinite(v) ? color(v) : COLORS.waffleBg;
+        })
+        .attr("stroke", "#111")
+        .attr("stroke-width", 0.3)
+        .attr("vector-effect", "non-scaling-stroke");
+
+      countries
+        .append("title")
+        .text((d) => {
+          const props = d.properties || {};
+          const name = props.admin || "";
+          const v = props._value;
+          const conflict = props._conflict;
+          const stable = props._stable;
+          const fmt = d3.format(".1f");
+
+          const lines = [];
+          lines.push(name || "Unknown");
+          lines.push(
+            "Average out-of-school (2010–2024): " +
+              (Number.isFinite(v) ? fmt(v) + "%" : "n/a")
+          );
+          if (Number.isFinite(conflict)) {
+            lines.push("Conflict: " + fmt(conflict) + "%");
+          }
+          if (Number.isFinite(stable)) {
+            lines.push("Stable: " + fmt(stable) + "%");
+          }
+          return lines.join("\n");
+        });
+
+      // легенда в том же стиле и позиции, что и в Change Map
+      const legendWidth = Math.min(220, width * 0.55);
+      const legendHeight = 10;
+      const legendMargin = 16;
+
+      const defs = svg.append("defs");
+      const gradientId = "choropleth-avg-gradient";
+
+      const grad = defs
+        .append("linearGradient")
+        .attr("id", gradientId)
+        .attr("x1", "0%")
+        .attr("x2", "100%")
+        .attr("y1", "0%")
+        .attr("y2", "0%");
+
+      d3.range(0, 1.01, 0.1).forEach((t) => {
+        grad
+          .append("stop")
+          .attr("offset", `${t * 100}%`)
+          .attr("stop-color", COLORS.heatmap(t * (maxVal > 0 ? 1 : 0)));
+      });
+
+      const legendGroup = svg
+        .append("g")
+        .attr("class", "legend")
+        .attr(
+          "transform",
+          `translate(${width - legendWidth - legendMargin},${
+            height - legendMargin - 30
+          })`
+        );
+
+      legendGroup
+        .append("rect")
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .attr("fill", `url(#${gradientId})`);
+
+      const legendScale = d3
+        .scaleLinear()
+        .domain([0, maxVal])
+        .range([0, legendWidth]);
+
+      const legendAxis = d3
+        .axisBottom(legendScale)
+        .ticks(4)
+        .tickFormat((d) => d3.format(".1f")(d) + "%");
+
+      legendGroup
+        .append("g")
+        .attr("transform", `translate(0,${legendHeight})`)
+        .call(legendAxis)
+        .call((gAxis) => {
+          gAxis
+            .selectAll("text")
+            .attr("fill", COLORS.text)
+            .attr("font-size", 10);
+          gAxis.selectAll("line,path").attr("stroke", "#555");
+        });
+
+      legendGroup
+        .append("text")
+        .attr("x", 0)
+        .attr("y", -4)
+        .attr("fill", COLORS.text)
+        .attr("font-size", 11)
+        .text("Average out-of-school rate (%)");
+    })
+    .catch((err) => {
+      console.error("Choropleth map error:", err);
+      d3.select(container)
+        .append("div")
+        .style("color", "red")
+        .style("padding", "8px")
+        .style("font-size", "12px")
+        .text("Error loading map");
+    });
 }

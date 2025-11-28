@@ -1,0 +1,16 @@
+country,conflict_status,avg_out_of_school_pct
+Brazil,Conflict,4.60764
+Brazil,Stable,3.96603
+Canada,Stable,1.9977645454545454
+Germany,Conflict,1.74626
+Germany,Stable,1.2035546153846153
+Japan,Stable,0.08629200000000001
+Kenya,Conflict,17.28183
+Palestine,Conflict,7.3872888888888895
+Palestine,Stable,5.4260019999999995
+Sudan,Conflict,45.35447444444444
+Syria,Conflict,23.12883875
+Syria,Stable,1.21786
+Ukraine,Conflict,15.6772575
+Ukraine,Stable,9.320500000000001
+Yemen,Conflict,29.1097325
