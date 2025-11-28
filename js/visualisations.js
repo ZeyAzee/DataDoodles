@@ -1,3 +1,5 @@
+// js/visualisations.js
+
 document.addEventListener("DOMContentLoaded", () => {
   const COLORS = {
     // colors for status
@@ -1653,19 +1655,10 @@ async function drawBumpChart(container, dataUrl, COLORS) {
 
 /**
  * ==================================================================
- * КАРТА 1: Change Map (ФИНАЛЬНАЯ ПРОВЕРЕННАЯ ВЕРСИЯ)
+ * map 1: Change Map 
  * ==================================================================
  */
-/**
- * Change Map (2010 → 2024) — Evolution of Out-of-School Rates
- * Ожидается, что CSV содержит:
- * - один колонко-идентификатор страны (iso_a3/ISO_A3/iso3/…)
- * - несколько числовых колонок с показателями по годам
- * Код автоматически:
- * - определяет колонку с кодом страны
- * - выбирает самую раннюю и самую позднюю «годовую» колонку
- * - рисует карту изменений (delta = latest - base)
- */
+
 function drawChoroplethMapChange(containerEl, csvUrl, geoJsonUrl, COLORS) {
   const width = containerEl.clientWidth || 600;
   const height = Math.max(320, Math.round(width * 0.55));
@@ -1806,16 +1799,12 @@ function drawChoroplethMapChange(containerEl, csvUrl, geoJsonUrl, COLORS) {
 
 /**
  * ==================================================================
- * КАРТА 2: Choropleth Map (Avg) (ФИНАЛЬНАЯ ПРОВЕРЕННАЯ ВЕРСИЯ)
+ * map 2: Choropleth Map (Avg)
  * ==================================================================
  */
-/**
- * Change Map: разница в процентах детей вне школы между статусами
- * "Conflict" и "Stable" для каждой страны (Conflict - Stable).
- * CSV: country, conflict_status, avg_out_of_school_pct
- */
+
 function drawChoroplethMapAvg(container, csvPath, geoPath, COLORS) {
-  // те же размеры, что и в drawChoroplethMapChange
+
   const width = container.clientWidth || 600;
   const height = Math.max(320, Math.round(width * 0.55));
 
@@ -1875,7 +1864,6 @@ function drawChoroplethMapAvg(container, csvPath, geoPath, COLORS) {
 
       const maxVal = d3.max(values);
 
-      // та же логика проекции и вертикального центрирования, что в Change Map
       const projection = d3.geoNaturalEarth1().fitWidth(width, geojson);
       const path = d3.geoPath(projection);
 
@@ -1928,7 +1916,6 @@ function drawChoroplethMapAvg(container, csvPath, geoPath, COLORS) {
           return lines.join("\n");
         });
 
-      // легенда в том же стиле и позиции, что и в Change Map
       const legendWidth = Math.min(220, width * 0.55);
       const legendHeight = 10;
       const legendMargin = 16;
@@ -2005,5 +1992,102 @@ function drawChoroplethMapAvg(container, csvPath, geoPath, COLORS) {
         .style("padding", "8px")
         .style("font-size", "12px")
         .text("Error loading map");
+    });
+}
+
+/**
+ * ==================================================================
+ * map 3: Proportional Symbol Map
+ * ==================================================================
+ */
+function drawProportionalSymbolMap(container, csvPath, geoJsonPath, COLORS) {
+  const width = container.clientWidth || 400;
+  const height = container.clientHeight || 260;
+
+  container.innerHTML = "";
+  container.style.position = "relative";
+
+  const svg = d3
+    .select(container)
+    .append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMidYMid meet");
+
+  const g = svg.append("g");
+
+  const projection = d3.geoNaturalEarth1();
+  const path = d3.geoPath(projection);
+
+  const tooltip = d3
+    .select(container)
+    .append("div")
+    .style("position", "absolute")
+    .style("pointer-events", "none")
+    .style("background", "#111")
+    .style("color", "#f5f5f5")
+    .style("padding", "6px 8px")
+    .style("border-radius", "4px")
+    .style("font-size", "11px")
+    .style("opacity", 0);
+
+  Promise.all([
+    d3.json(geoJsonPath),
+    d3.csv(csvPath, d3.autoType),
+  ])
+    .then(([geo, data]) => {
+      const valueByCountry = new Map(
+        data.map((d) => [d.country, d.avg_out_of_school_pct])
+      );
+
+      const values = Array.from(valueByCountry.values()).filter(
+        (v) => v != null && !isNaN(v)
+      );
+
+      if (!values.length) return;
+
+      const color = d3
+        .scaleSequential()
+        .domain([d3.min(values), d3.max(values)])
+        .interpolator(COLORS.heatmap);
+
+      projection.fitExtent(
+        [
+          [10, 10],
+          [width - 10, height - 10],
+        ],
+        geo
+      );
+
+      g.selectAll("path")
+        .data(geo.features)
+        .join("path")
+        .attr("d", path)
+        .attr("fill", (d) => {
+          const v = valueByCountry.get(d.properties.name);
+          return v != null ? color(v) : "#2b2b2b";
+        })
+        .attr("stroke", "#111")
+        .attr("stroke-width", 0.3)
+        .on("mousemove", function (event, d) {
+          const v = valueByCountry.get(d.properties.name);
+          tooltip
+            .style("opacity", 1)
+            .html(
+              `<strong>${d.properties.name}</strong><br>` +
+                (v != null
+                  ? `Out-of-school: ${v.toFixed(1)}%`
+                  : "No data")
+            )
+            .style("left", event.offsetX + 12 + "px")
+            .style("top", event.offsetY + 12 + "px");
+        })
+        .on("mouseleave", function () {
+          tooltip.style("opacity", 0);
+        });
+    })
+    .catch((error) => {
+      console.error("Error loading Change Map data:", error);
+      container.innerHTML = "Error loading data.";
+      container.style.color = "red";
     });
 }
