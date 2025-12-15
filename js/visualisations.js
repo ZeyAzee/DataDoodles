@@ -141,6 +141,20 @@ document.addEventListener("DOMContentLoaded", () => {
             COLORS
           );
           break;
+        case "Sankey diagram":
+          drawSankeydiagram(
+            canvas,
+            "Data/ChildreEducationConflict/Connection/sankey.csv",
+            COLORS
+          );
+          break;
+        case "Network diagram":
+          drawNetworkdiagram(
+            canvas,
+            "Data/ChildreEducationConflict/Connection/network.csv",
+            COLORS
+          );
+          break;
       }
     } catch (error) {
       console.error("Error drawing chart:", chartType, error);
@@ -2090,4 +2104,295 @@ function drawProportionalSymbolMap(container, csvPath, geoJsonPath, COLORS) {
       container.innerHTML = "Error loading data.";
       container.style.color = "red";
     });
+}
+/**
+ * ========================================================================
+ * 1. Connection: Sankey diagram
+ * Файл: sankey.csv
+ * ========================================================================
+ */
+function drawSankeydiagram(container, csvPath, colors) {
+    // 1. УВЕЛИЧЕННЫЕ ОТСТУПЫ (Важно для подписей по бокам)
+    const margin = {top: 20, right: 150, bottom: 20, left: 100}; 
+    const width = container.clientWidth - margin.left - margin.right;
+    const height = container.clientHeight - margin.top - margin.bottom;
+
+    // Очистка
+    container.innerHTML = "";
+
+    // Создаем SVG
+    const svg = d3.select(container).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Загрузка данных
+    d3.csv(csvPath).then(data => {
+        
+        // --- Подготовка данных для Sankey ---
+        const nodesSet = new Set();
+        data.forEach(d => {
+            nodesSet.add(d.conflict_status);
+            nodesSet.add(d.education_level);
+        });
+
+        const nodesArray = Array.from(nodesSet);
+        const nodeMap = new Map(nodesArray.map((name, i) => [name, i]));
+        const nodes = nodesArray.map(name => ({name: name}));
+        
+        const links = data.map(d => ({
+            source: nodeMap.get(d.conflict_status),
+            target: nodeMap.get(d.education_level),
+            value: +d.value
+        }));
+
+        // --- Настройка генератора Sankey ---
+        const sankey = d3.sankey()
+            .nodeWidth(20)          // Ширина узла (столбика)
+            .nodePadding(30)        // Расстояние между узлами по вертикали
+            .extent([[1, 1], [width - 1, height - 6]]);
+
+        const {nodes: graphNodes, links: graphLinks} = sankey({
+            nodes: nodes.map(d => Object.assign({}, d)),
+            links: links.map(d => Object.assign({}, d))
+        });
+
+        // --- Рисуем связи (Links) ---
+        const link = svg.append("g")
+            .attr("fill", "none")
+            .attr("stroke-opacity", 0.4) // Прозрачность связей как на сайте
+            .selectAll("g")
+            .data(graphLinks)
+            .join("g")
+            .style("mix-blend-mode", "screen"); // Режим наложения для красивого пересечения
+
+        link.append("path")
+            .attr("d", d3.sankeyLinkHorizontal())
+            .attr("stroke", d => {
+                // Цвет связи зависит от источника
+                if (d.source.name === "Conflict") return colors.conflict;
+                if (d.source.name === "Stable") return colors.stable;
+                return "#999";
+            })
+            .attr("stroke-width", d => Math.max(1, d.width))
+            .style("transition", "stroke-opacity 0.3s")
+            .on("mouseover", function() { d3.select(this).attr("stroke-opacity", 0.7); })
+            .on("mouseout", function() { d3.select(this).attr("stroke-opacity", 0.4); });
+
+        // Подсказки при наведении
+        link.append("title")
+            .text(d => `${d.source.name} → ${d.target.name}\n${d.value}`);
+
+        // --- Рисуем узлы (Nodes) ---
+        svg.append("g")
+            .selectAll("rect")
+            .data(graphNodes)
+            .join("rect")
+            .attr("x", d => d.x0)
+            .attr("y", d => d.y0)
+            .attr("height", d => d.y1 - d.y0)
+            .attr("width", d => d.x1 - d.x0)
+            .attr("fill", d => {
+                if (d.name === "Conflict") return colors.conflict;
+                if (d.name === "Stable") return colors.stable;
+                return "#666"; // Серый цвет для правых узлов (Exclusion Levels)
+            })
+            .attr("stroke", "#222"); // Темная обводка для контраста
+
+        // --- ТЕКСТОВЫЕ ПОДПИСИ (Labels) ---
+        const labels = svg.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 13)
+            .attr("fill", colors.text) // Ваш цвет #c4c0c0
+            .selectAll("text")
+            .data(graphNodes)
+            .join("text")
+            .attr("y", d => (d.y1 + d.y0) / 2) // Центрируем по вертикали
+            .attr("dy", "0.35em")
+            .style("font-weight", "bold");
+
+        // 2. ЛОГИКА РАССТАНОВКИ КАК НА ФОТО
+        labels
+            .attr("x", d => {
+                // Если узел слева (меньше половины ширины) -> текст еще левее
+                if (d.x0 < width / 2) return d.x0 - 10; 
+                // Если узел справа -> текст еще правее
+                return d.x1 + 10; 
+            })
+            .attr("text-anchor", d => {
+                // Если слева -> привязка к концу текста (текст идет влево)
+                if (d.x0 < width / 2) return "end";
+                // Если справа -> привязка к началу текста (текст идет вправо)
+                return "start";
+            })
+            .text(d => d.name); // Только название
+
+        // Добавляем значение (цифру) рядом с названием (опционально)
+        /*
+        labels.append("tspan")
+            .attr("fill-opacity", 0.7)
+            .attr("font-weight", "normal")
+            .text(d => ` (${d.value})`); 
+        */
+
+    }).catch(error => {
+        console.error("Error loading CSV:", error);
+        container.innerHTML = "Error loading chart.";
+        container.style.color = "red";
+    });
+}
+/**
+ * ========================================================================
+ * 2. Connection: Network diagram
+ * Файл: network.csv
+ * ========================================================================
+ */
+/**
+ * Функция для отрисовки сетевого графика (Network Diagram)
+ * @param {HTMLElement} container - DOM-элемент контейнера для графика
+ * @param {string} dataPath - Путь к CSV файлу
+ * @param {Object} colors - Объект с цветовой схемой (stable, conflict, text и т.д.)
+ */
+/**
+ * Функция для отрисовки сетевого графика с возможностью Zoom & Pan
+ */
+function drawNetworkdiagram(container, dataPath, colors) {
+  const width = container.clientWidth || 600;
+  const height = container.clientHeight || 400;
+
+  d3.select(container).selectAll("*").remove();
+
+  const svg = d3.select(container)
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height])
+    .style("max-width", "100%")
+    .style("height", "auto")
+    .style("cursor", "move"); // Курсор-рука, чтобы показать возможность двигать
+
+  // 1. Создаем группу-контейнер для всего содержимого.
+  // Именно её мы будем трансформировать (двигать/увеличивать).
+  const g = svg.append("g");
+
+  // 2. Настраиваем поведение Zoom
+  const zoom = d3.zoom()
+    .scaleExtent([0.1, 8]) // Ограничение зума: от 0.1x до 8x
+    .on("zoom", (event) => {
+      // При событии zoom применяем трансформацию к группе g
+      g.attr("transform", event.transform);
+    });
+
+  // 3. Применяем зум к SVG
+  // transition().duration(750) можно убрать, если не нужна анимация при старте
+  svg.call(zoom)
+     // Опционально: устанавливаем начальный зум, чтобы график был чуть отдален или по центру
+     .call(zoom.transform, d3.zoomIdentity); 
+
+  // --- Дальше стандартная логика графика ---
+
+  const countryStatus = {
+    "Germany": "stable", "Japan": "stable", "Canada": "stable",
+    "Brazil": "stable", "Palestine": "stable", "Kenya": "conflict",
+    "Ukraine": "conflict", "Syria": "conflict", "Yemen": "conflict",
+    "Sudan": "conflict" 
+  };
+
+  d3.csv(dataPath).then(data => {
+    const links = data.map(d => ({
+      source: d.source,
+      target: d.target,
+      weight: +d.weight
+    }));
+
+    const nodeNames = Array.from(new Set(links.flatMap(d => [d.source, d.target])));
+    const nodes = nodeNames.map(name => ({
+      id: name,
+      status: countryStatus[name] || "conflict"
+    }));
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.weight * 15))
+      .force("charge", d3.forceManyBody().strength(-300))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collide", d3.forceCollide().radius(25));
+
+    // Важно: рисуем внутри группы g, а не напрямую в svg
+    const link = g.append("g")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6)
+      .selectAll("line")
+      .data(links)
+      .join("line")
+      .attr("stroke-width", d => Math.max(1, 20 / d.weight));
+
+    const node = g.append("g")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
+      .selectAll("circle")
+      .data(nodes)
+      .join("circle")
+      .attr("r", 10)
+      .attr("fill", d => d.status === "stable" ? colors.stable : colors.conflict)
+      // ВАЖНО: drag должен работать корректно вместе с zoom
+      .call(drag(simulation));
+
+    const label = g.append("g")
+      .selectAll("text")
+      .data(nodes)
+      .join("text")
+      .attr("dx", 14)
+      .attr("dy", ".35em")
+      .text(d => d.id)
+      .style("font-family", "sans-serif")
+      .style("font-size", "12px")
+      .style("fill", colors.text)
+      .style("pointer-events", "none"); 
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+
+      label
+        .attr("x", d => d.x)
+        .attr("y", d => d.y);
+    });
+
+  }).catch(error => {
+    console.error("Error loading Network Diagram data:", error);
+    container.innerHTML = "Error loading data.";
+  });
+
+  // Функция Drag & Drop (немного изменена для совместимости с Zoom)
+  function drag(simulation) {
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+
+    return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+  }
 }
